@@ -1,6 +1,7 @@
 import type { OfferDefinition } from "./types";
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_APPLICATION_URL = import.meta.env.VITE_BASE_APPLICATION_URL;
 export const AWS_CREDENTIALS = {
   bucket: import.meta.env.VITE_AWS_BUCKET,
 };

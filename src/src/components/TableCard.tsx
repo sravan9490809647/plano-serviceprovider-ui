@@ -9,8 +9,7 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import CustomPaperWrapper from './CustomPaperWrapper';
 import QRCodeDialog from './QRCodeDialog';
 import Storage from '../utils/Storage';
-import { FONT_FAMILY } from '../Constants';
-import { useNavigate } from 'react-router-dom';
+import { BASE_APPLICATION_URL, FONT_FAMILY } from '../Constants';
 
 interface TableCardProps {
     tableNumber: number;
@@ -26,7 +25,6 @@ const TableCard: React.FC<TableCardProps> = ({
     tableName,
     tableId,
 }) => {
-    const navigate = useNavigate();
     const businessId = Storage.getItem("businessId");
     const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
@@ -36,7 +34,6 @@ const TableCard: React.FC<TableCardProps> = ({
         if (!businessId || !tableId) {
             return;
         }
-        navigate(`/${businessId}?tableId=${tableId}`);
         window.open(`/${businessId}?tableId=${tableId}`, '_blank');
     };
 
@@ -102,7 +99,6 @@ const TableCard: React.FC<TableCardProps> = ({
             </Box>
 
             <Link
-                // href={generateCustomerSiteUrl(businessId || '', tableId || '')}
                 onClick={handleLinkClick}
                 sx={{
                     fontSize: '0.75rem',
@@ -123,7 +119,7 @@ const TableCard: React.FC<TableCardProps> = ({
                     open={qrDialogOpen}
                     onClose={handleCloseQRDialog}
                     title={tableName}
-                    url={`/${businessId}?tableId=${tableId}`}
+                    url={`${BASE_APPLICATION_URL}${businessId}&tableId=${tableId}`}
                     description="Scan this QR code to open the table ordering page"
                 />
             )}
