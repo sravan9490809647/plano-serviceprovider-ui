@@ -12,11 +12,12 @@ import PrintIcon from "@mui/icons-material/Print";
 import CustomPaperWrapper from "../../../components/CustomPaperWrapper";
 import CustomButton from "../../../components/Button";
 import type { ReservedTableOrdersResponse } from "../../../types";
-import { CUSTOMER_SITE_URL, DEFAULT_TIME_FORMAT, FONT_FAMILY, ORDER_STATUS } from "../../../Constants";
+import { DEFAULT_TIME_FORMAT, FONT_FAMILY, ORDER_STATUS } from "../../../Constants";
 import Storage from "../../../utils/Storage";
 import { formatDateTime } from "../../../utils/dateUtils";
 import { formatPrice } from "../../../utils/common";
 import { themeColors } from "../../../utils/colors";
+import { useNavigate } from "react-router-dom";
 
 interface TableOrderDetailsProps {
     orderDetails: ReservedTableOrdersResponse | null;
@@ -41,6 +42,7 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
     onHandlePrintBill,
     printingBill
 }) => {
+    const navigate = useNavigate();
     // Filter out orders with null orderDetails or empty orderedItems
     const validOrders = Array.isArray(orderDetails)
         ? orderDetails.filter(order =>
@@ -62,20 +64,12 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
 
     const businessId = Storage.getItem("businessId");
 
-    const generateCustomerSiteUrl = () => {
-        if (!businessId || !tableId) {
-            return '#';
-        }
-        return `${CUSTOMER_SITE_URL}/${businessId}/?tableId=${tableId}`;
-    };
-
     const handleLinkClick = (event: React.MouseEvent) => {
         event.preventDefault();
         if (!businessId || !tableId) {
             return;
         }
-        // Open in new tab
-        window.open(generateCustomerSiteUrl(), '_blank', 'noopener,noreferrer');
+        window.open(`/${businessId}?tableId=${tableId}`, '_blank');
     };
 
     return (
@@ -99,7 +93,7 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
                     <Typography variant="h5">
                         {tableName}
                         <Link
-                            href={generateCustomerSiteUrl()}
+                            // href={generateCustomerSiteUrl()}
                             onClick={handleLinkClick}
                             sx={{
                                 fontSize: '0.8rem',

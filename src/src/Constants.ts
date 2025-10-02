@@ -1,7 +1,6 @@
 import type { OfferDefinition } from "./types";
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
-export const CUSTOMER_SITE_URL = import.meta.env.VITE_CUSTOMER_SITE_URL;
 export const AWS_CREDENTIALS = {
   bucket: import.meta.env.VITE_AWS_BUCKET,
 };
@@ -72,6 +71,10 @@ export const ENDPOINTS = {
     DISABLE_CHECKOUT_REQUEST: "Tables/DisableCheckoutRequest?TableId=",
     GET_WAITER_REQUESTS: "Tables/GetWaiterRequests?BusinessId=",
     GET_CHECKOUT_REQUESTS: "Tables/GetCheckOutRequests?BusinessId=",
+    GET_TABLE_DETAILS: "Tables/TableDetailsByTableId?TableId=",
+    WAITER_REQUEST: "Vicinity/WaiterRequest",
+    CHECKOUT_REQUEST: "Vicinity/CheckOutRequest",
+    SEND_MESSAGE: "Vicinity/SendMessage",
   },
   ORDERS: {
     GET_ORDERS: "Orders/GetOrders?BusinessId=",
@@ -81,6 +84,7 @@ export const ENDPOINTS = {
     SET_ORDER_STATUS_TO_COMPLETE: "Orders/SetOrderStatusToComplete?OrderId=",
     SET_ORDER_STATUS_TO_PREPARING: "Orders/SetOrderStatusToPreparing?OrderId=",
     SET_ORDER_STATUS_TO_DECLINE: "Orders/DeclineOrder?OrderId=",
+    CREATE_ORDER: "user/OrderBooking/Add",
   },
   EARNINGS: {
     GET_EARNINGS: "Earnings/GetEarnings?BusinessId=",

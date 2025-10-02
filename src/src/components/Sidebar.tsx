@@ -30,7 +30,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
-import { APP_NAME, CUSTOMER_SITE_URL, FONT_FAMILY } from "../Constants";
+import { APP_NAME, FONT_FAMILY } from "../Constants";
 import DialogWrapper from "./DialogWrapper";
 import Storage from "../utils/Storage";
 import { useAuth } from "../context/AuthContext";
@@ -230,9 +230,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         <Divider />
         <List>
           <ListItemButton
-            onClick={() =>
-              window.open(`${CUSTOMER_SITE_URL}${businessId}`, "_blank")
-            }
+            onClick={() => {
+              window.open(`/${businessId}`, "_blank");
+            }}
             sx={{
               borderRadius: 5,
               padding: "8px 16px",

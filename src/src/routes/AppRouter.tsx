@@ -28,6 +28,8 @@ import BusinessSetupForm from "../pages/BusinessSetup/BusinessDetails";
 import BusinessDetailsView from "../pages/BusinessSetup/BusinessDetailsView";
 import Earnings from "../pages/Earnings/Earnings";
 import Receipts from "../pages/Receipts/Receipts";
+import Dashboard from "../customerSite/Dashboard/Dashboard";
+import CheckoutPage from "../customerSite/Dashboard/CheckoutPage";
 // import OffersPage from "../pages/Offers/Offers";
 // import OffersCreateContainer from "../pages/Offers/OffersCreateContainer";
 // import ReceiptPrinter from "../pages/ReceiptPrinter";
@@ -150,7 +152,8 @@ const AppRouter = () => {
               </PublicRoute>
             }
           />
-
+          <Route path={"/:businessId"} element={<Dashboard />} />
+          <Route path={"/:businessId/checkout"} element={<CheckoutPage />} />
           {/* Business Setup Route → no sidebar */}
           <Route
             path="/business_setup"
