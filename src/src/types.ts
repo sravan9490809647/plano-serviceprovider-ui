@@ -53,6 +53,11 @@ export interface CategoryWithItems {
   category: MenuCategory;
   items: MenuItem[];
 }
+export interface ItemVariation {
+  id: string;
+  title: string;
+  price: number;
+}
 
 export interface OptionGroup {
   name: string;
@@ -303,3 +308,166 @@ export interface CheckoutRequestItem {
 }
 
 export type DataItem = WaiterRequestItem | CheckoutRequestItem;
+
+// user types
+
+export interface UserMenuItem {
+  id: string;
+  sId: string;
+  bId: string;
+  cId: string;
+
+  title: string;
+  description?: string;
+
+  thumbnailImage?: string; // can be undefined if no image
+  price: number;
+
+  inStock: boolean;
+  status: boolean;
+
+  createdById: string;
+  createdOn: string; // ISO8601 date string
+  modifiedById: string;
+  modifiedOn: string; // ISO8601 date string
+
+  // Optional: Categories associated
+  categoryIds?: string[];
+
+  // Optional: Included ingredients
+  ingredients?: string[];
+
+  // Optional: Item variations
+  itemVariations?: ItemVariation[];
+
+  // Optional: Option groups
+  optionGroups?: OptionGroup[];
+}
+
+// Supporting types:
+export interface ItemVariation {
+  id: string;
+  title: string;
+  price: number;
+}
+
+export interface UserOptionGroup {
+  id: string;
+  title: string;
+  required: boolean;
+  allowMultiple: boolean;
+  maxSelections: number;
+  options: Option[];
+}
+
+export interface Option {
+  id: string;
+  title: string;
+  price: number;
+}
+
+export interface CategoryWithItems {
+  category: MenuCategory;
+  items: MenuItem[];
+}
+
+export interface ItemVariation {
+  id: string;
+  title: string;
+  price: number;
+}
+
+export interface Option {
+  id: string;
+  title: string;
+  price: number;
+}
+
+export interface UserOptionGroup {
+  id: string;
+  title: string;
+  required: boolean;
+  allowMultiple: boolean;
+  maxSelections: number;
+  options: Option[];
+}
+
+export interface Offer {
+  id: string;
+  title: string;
+  description?: string;
+  validFrom: string; // ISO date string
+  validTo: string; // ISO date string
+  daysOfWeek?: string; // e.g.,"1,2,3,4,5,6,7"
+  qualifyingCategories?: string[]; // Array of category IDs
+  qualifyingItems?: string[]; // Array of item IDs
+  freeCategories?: string[]; // Array of category IDs for free items
+  freeItems?: string[]; // Array of item IDs for free items
+  type: string;
+  percentage?: number; // For percentage offers
+}
+export interface BusinessDetails {
+  bId: string;
+  businessName: string;
+  description: string;
+  amenities: string;
+  parkingInformation: string;
+  tablesAndOrderingInformation: string;
+  deliveryinformation: string;
+  pickupAndBusinessLocationInformation: string;
+  paymentInformation: string;
+  brandAssets: string;
+  businessHours: {
+    day: string;
+    openingTime: string;
+    closingTime: string;
+    isClosed: boolean;
+  }[];
+}
+
+export interface OrderDetails {
+  id: string;
+  userId: string;
+  bId: string;
+  orderCode: string;
+  totalPrice: number;
+  note: string;
+  appliedOffers: string;
+  orderStatus: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  tId: string;
+  tableName: string;
+  createdById: string;
+  createdOn: string;
+  modifiedById: string;
+  modifiedOn: string;
+  status: boolean;
+}
+
+export interface OrderedItem {
+  id: string;
+  userId: string;
+  orderId: string;
+  bId: string;
+  iId: string;
+  title: string;
+  quantity: number;
+  price: number;
+  totalPrice: number;
+  removeIngredients: string;
+  itemVariations: string;
+  optionGroups: string;
+  appliedOffers: string | null;
+  thumbnailImage: string | null;
+  createdById: string;
+  createdOn: string;
+  modifiedById: string;
+  modifiedOn: string;
+  status: boolean;
+}
+
+// export interface ReservedTableOrder {
+//   orderDetails: OrderDetails;
+//   orderedItems: OrderedItem[];
+// }
