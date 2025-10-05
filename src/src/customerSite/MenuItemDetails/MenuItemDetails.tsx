@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from "react";
-import { Box, Typography, Divider } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CustomButton from "../../components/Button";
 import VariationSelector from "./components/VariationSelector";
 import OptionGroupSelector from "./components/OptionGroupSelector";
 import IngredientsCustomizer from "./components/IngredientsCustomizer";
 import type { ItemVariation, OptionGroup, UserMenuItem, UserOptionGroup } from "../../types";
-import DialogWrapper from "../../components/DialogWrapper";
 import { CURRENCY } from "../../Constants";
 import type { CartItem } from "../../redux/reducers/Cart";
+import DialogWrapper from "../components/DialogWrapper";
+import AllergiesDisplay from "../../components/AllergiesDisplay";
 
 interface Option {
   id: string;
@@ -171,9 +172,9 @@ const MenuItemDetails: React.FC<Props> = ({
                 setSelectedVariation={setSelectedVariation}
               />
             )}
-
-          <Divider sx={{ my: 2 }} />
-
+          {/* Allergies */}
+          <AllergiesDisplay allergies={itemDetails?.allergies} />
+          {/* Option Groups */}
           {itemDetails.optionGroups?.map((group) => (
             <Box key={group.id} mb={2}>
               <OptionGroupSelector
@@ -233,6 +234,7 @@ const MenuItemDetails: React.FC<Props> = ({
                   title: itemDetails.title,
                   thumbnailImage: itemDetails.thumbnailImage || null,
                   variation: selectedVariation,
+                  allergies: itemDetails.allergies,
                   optionGroups: selectedOptions,
                   removedIngredients: removedIngredients,
                   price: basePrice,

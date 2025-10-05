@@ -28,6 +28,7 @@ export interface MenuItem {
   inStock: boolean;
   order: number;
   ingredients: string[];
+  allergies?: string;
   itemVariations: {
     title: string;
     price: number;
@@ -336,6 +337,9 @@ export interface UserMenuItem {
 
   // Optional: Included ingredients
   ingredients?: string[];
+
+  // Optional: Allergies (JSON string format)
+  allergies?: string;
 
   // Optional: Item variations
   itemVariations?: ItemVariation[];

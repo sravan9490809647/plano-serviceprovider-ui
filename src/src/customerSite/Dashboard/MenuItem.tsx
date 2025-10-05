@@ -122,8 +122,8 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
             <Typography
               variant="h6"
               gutterBottom
-              fontWeight={600}
               sx={{
+                fontFamily: FONT_FAMILY.BOLD,
                 fontSize: "0.8rem", // mobile font size
                 [theme.breakpoints.up('md')]: {
                   fontSize: "1rem", // larger desktop font size

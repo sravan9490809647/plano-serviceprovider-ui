@@ -26,6 +26,7 @@ import NoDataFound from "../../components/NoDataFound";
 import { CustomSwitch, StickyBox } from "../../Styles";
 import { formatPrice } from "../../utils/common";
 import { FONT_FAMILY } from "../../Constants";
+import AllergiesDisplay from "../../components/AllergiesDisplay";
 
 const ItemsAvailability: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -292,7 +293,8 @@ const ItemsAvailability: React.FC = () => {
                           </ul>
                         </Box>
                       )}
-
+                      {/* Allergies */}
+                      <AllergiesDisplay allergies={itemDetails?.allergies} />
                       {/* Option Groups */}
                       {itemDetails?.optionGroups?.map((group, index) => (
                         <Box key={index} mb={1}>
