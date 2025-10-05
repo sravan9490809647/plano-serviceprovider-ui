@@ -221,6 +221,7 @@ const Dashboard = () => {
               variation,
               optionGroups,
               removedIngredients,
+              allergies,
               price,
               totalPrice,
             }) => {
@@ -231,6 +232,7 @@ const Dashboard = () => {
                   quantity,
                   thumbnailImage,
                   variation,
+                  allergies,
                   optionGroups,
                   removedIngredients,
                   price,

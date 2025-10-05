@@ -28,6 +28,7 @@ import ItemSummary from "./components/ItemSummary";
 import IngredientsSection from "./components/IngredientsSection";
 import ImageUpload from "./components/ImageUpload";
 import ItemVariations from "./components/ItemVariations";
+import AllergensSection from "./components/AllergensSection";
 
 const AddMenuItem = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,6 +61,7 @@ const AddMenuItem = () => {
     variations: [] as { name: string; price: string }[],
     newVariation: { name: "", price: "" },
     editingVariationIndex: -1,
+    allergies: [] as string[],
   });
 
   const [errors, setErrors] = useState({
@@ -129,6 +131,11 @@ const AddMenuItem = () => {
           })) || [],
         newVariation: { name: "", price: "" },
         editingVariationIndex: -1,
+        allergies: itemDetails.allergies ?
+          (itemDetails.allergies.startsWith('[') ?
+            JSON.parse(itemDetails.allergies) :
+            itemDetails.allergies.split(',').map(a => a.trim())
+          ) : [],
       });
       setOptionGroups(
         itemDetails.optionGroups?.map((g) => ({
@@ -179,6 +186,7 @@ const AddMenuItem = () => {
     }));
   };
 
+  console.log(formData.allergies);
   const handleAddVariation = () => {
     if (
       formData.newVariation.name.trim() &&
@@ -218,6 +226,15 @@ const AddMenuItem = () => {
       ...prev,
       variations: prev.variations.filter((_, i) => i !== index),
       editingVariationIndex: prev.editingVariationIndex === index ? -1 : prev.editingVariationIndex,
+    }));
+  };
+
+  const handleAllergenChange = (allergen: string, checked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      allergies: checked
+        ? [...prev.allergies, allergen]
+        : prev.allergies.filter((a) => a !== allergen),
     }));
   };
 
@@ -269,6 +286,7 @@ const AddMenuItem = () => {
         thumbnailImage: thumbnailImageUrl,
         inStock: true,
         ingredients: formData.ingredients,
+        allergies: JSON.stringify(formData.allergies),
         itemVariations: formData.variations.map((v) => ({
           title: v.name,
           price: parseFloat(v.price),
@@ -366,6 +384,10 @@ const AddMenuItem = () => {
           onImageChange={handleImageChange}
         />
 
+        <AllergensSection
+          selectedAllergies={formData.allergies}
+          onAllergenChange={handleAllergenChange}
+        />
 
         <CustomPaperWrapper>
           <OptionGroups

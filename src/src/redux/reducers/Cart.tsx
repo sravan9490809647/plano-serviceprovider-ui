@@ -10,7 +10,8 @@ export interface CartItem {
   totalPrice?: number; // 🔷 totalPrice is derived from quantity * price
   variation?: ItemVariation | null; // 🔷 variations can be null if not applicable
   optionGroups?: OptionGroup[];
-  removedIngredients?: string[]; // 🔷 ingredients can be null if not applicable
+  removedIngredients?: string[];
+  allergies?: string;
 }
 
 interface CartState {

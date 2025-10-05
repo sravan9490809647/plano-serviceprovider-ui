@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import QuantityController from "../components/QuantityController";
+import AllergiesDisplay from "../../components/AllergiesDisplay";
 
 interface SelectedMenuListProps {
   cartItems: CartItem[];
@@ -146,6 +147,7 @@ const SelectedMenuList: React.FC<SelectedMenuListProps> = ({
                             variation: item.variation,
                             optionGroups: item.optionGroups,
                             removedIngredients: item.removedIngredients,
+                            allergies: item.allergies,
                           })
                         )
                       }
@@ -182,8 +184,8 @@ const SelectedMenuList: React.FC<SelectedMenuListProps> = ({
                   {/* Variation */}
                   {item.variation && (
                     <Grid item xs={12} sm={6}>
-                      <Typography fontWeight={600}>Variation:</Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body1" color="text.secondary">Variation:</Typography>
+                      <Typography variant="body2" fontFamily={FONT_FAMILY.BOLD}>
                         {item.variation.title} ({CURRENCY.symbol}{item.variation.price.toFixed(2)})
                       </Typography>
                     </Grid>
@@ -193,24 +195,26 @@ const SelectedMenuList: React.FC<SelectedMenuListProps> = ({
                   {item.removedIngredients &&
                     item.removedIngredients?.length > 0 && (
                       <Grid item xs={12} sm={6}>
-                        <Typography fontWeight={600}>
+                        <Typography variant="body1" color="text.secondary">
                           Removed Ingredients:
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" fontFamily={FONT_FAMILY.BOLD}>
                           {item.removedIngredients.join(", ")}
                         </Typography>
                       </Grid>
                     )}
                 </Grid>
+                <AllergiesDisplay allergies={item.allergies} />
 
+                {/* Allergies */}
                 {/* Options */}
                 {item.optionGroups?.map((group) => (
                   <Box key={group.id} mt={1}>
-                    <Typography fontWeight={600}>{group.title}:</Typography>
+                    <Typography variant="body1" color="text.secondary">{group.title}:</Typography>
                     <Grid container spacing={1}>
                       {group.options.map((opt) => (
                         <Grid item xs={12} sm={6} key={opt.id}>
-                          <Typography variant="body2">
+                          <Typography variant="body2" fontFamily={FONT_FAMILY.BOLD}>
                             • {opt.title} ({CURRENCY.symbol}
                             {opt.price.toFixed(2)})
                           </Typography>
@@ -225,7 +229,7 @@ const SelectedMenuList: React.FC<SelectedMenuListProps> = ({
             {/* Free Items */}
             {offer?.offer?.freeItems && offer?.offer?.freeItems?.length > 0 && (
               <Box mt={1} ml={1} p={1} bgcolor="#f9f9f9" borderRadius={1}>
-                <Typography fontWeight={600} mb={0.5}>
+                <Typography variant="body1" color="text.secondary" mb={0.5}>
                   Free Item(s) included:
                 </Typography>
                 {offer.offer.freeItems.map((fid) => {
@@ -251,10 +255,10 @@ const SelectedMenuList: React.FC<SelectedMenuListProps> = ({
                         style={{ borderRadius: 4 }}
                       />
                       <Box>
-                        <Typography variant="body2" fontWeight={600}>
+                        <Typography variant="body2" fontFamily={FONT_FAMILY.BOLD}>
                           {freeItem.title}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary" fontFamily={FONT_FAMILY.BOLD}>
                           {CURRENCY.symbol} {freeItem.price.toFixed(2)}
                         </Typography>
                       </Box>

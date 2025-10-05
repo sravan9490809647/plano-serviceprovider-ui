@@ -36,6 +36,10 @@ export const useMenuHandlers = () => {
             const hasNoDetails =
                 (!itemDetails.itemVariations ||
                     itemDetails.itemVariations.length === 0) &&
+                (!itemDetails.allergies ||
+                    itemDetails.allergies === "[]" ||
+                    itemDetails.allergies === '[]' ||
+                    (itemDetails.allergies.startsWith('[') && JSON.parse(itemDetails.allergies).length === 0)) &&
                 (!itemDetails.ingredients || itemDetails.ingredients.length === 0) &&
                 (!itemDetails.optionGroups || itemDetails.optionGroups.length === 0);
 

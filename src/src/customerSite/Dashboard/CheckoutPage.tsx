@@ -154,6 +154,7 @@ const CheckoutPage: React.FC = () => {
           itemVariations: JSON.stringify(item.variation),
           optionGroups: JSON.stringify(item.optionGroups || []),
           removeIngredients: JSON.stringify(item.removedIngredients || []),
+          allergies: item.allergies,
           thumbnailImage: item?.thumbnailImage || null,
           appliedOffers: offer
             ? JSON.stringify({
