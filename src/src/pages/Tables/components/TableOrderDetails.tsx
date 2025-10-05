@@ -17,7 +17,6 @@ import Storage from "../../../utils/Storage";
 import { formatDateTime } from "../../../utils/dateUtils";
 import { formatPrice } from "../../../utils/common";
 import { themeColors } from "../../../utils/colors";
-import { useNavigate } from "react-router-dom";
 
 interface TableOrderDetailsProps {
     orderDetails: ReservedTableOrdersResponse | null;
@@ -42,7 +41,6 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
     onHandlePrintBill,
     printingBill
 }) => {
-    const navigate = useNavigate();
     // Filter out orders with null orderDetails or empty orderedItems
     const validOrders = Array.isArray(orderDetails)
         ? orderDetails.filter(order =>
@@ -71,7 +69,6 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
         }
         window.open(`/${businessId}?tableId=${tableId}`, '_blank');
     };
-
     return (
         <CustomPaperWrapper sx={{ height: "calc(100vh - 120px)", display: "flex", flexDirection: "column" }}>
             {/* Header */}
@@ -245,6 +242,15 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
                         Print Receipt
                     </CustomButton>
                 </Box>
+            )}
+            {validOrders?.length === 0 && tableData?.isOccupied && (
+                <CustomButton
+                    fullWidth
+                    onClick={onTerminateSession}
+                    disabled={terminating}
+                >
+                    Clear Table
+                </CustomButton>
             )}
         </CustomPaperWrapper>
     );

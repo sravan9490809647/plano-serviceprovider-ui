@@ -64,6 +64,7 @@ const Tables: React.FC = () => {
                 toast.success(response.message || "Table session terminated successfully");
                 setReservedTableOrders(null);
                 setTableRtId("");
+                setSelectedTableData(null);
                 if (businessId) {
                     dispatch(fetchTables(businessId));
                 }
