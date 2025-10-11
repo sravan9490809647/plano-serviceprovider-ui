@@ -1,5 +1,6 @@
 // context/AuthContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
 import { useBackgroundPolling } from "../hooks/useBackgroundPolling";
 
 interface AuthContextType {
@@ -19,9 +20,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const stored = localStorage.getItem("businessSetup");
     return stored === "true";
   });
+  const [isCustomerRoute, setIsCustomerRoute] = useState(false);
+
+  // Check if current route is a customer-facing URL
+  useEffect(() => {
+    const checkRoute = () => {
+      const path = window.location.pathname;
+
+      // Customer routes contain GUID pattern: /:guid or /:guid/checkout
+      // GUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      const guidPattern = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
+      const customerRoutePattern = new RegExp(`^\\/${guidPattern}(?:\\/checkout)?$`);
+
+      setIsCustomerRoute(customerRoutePattern.test(path));
+    };
+
+    // Check initially
+    checkRoute();
+
+    // Listen for route changes
+    window.addEventListener('popstate', checkRoute);
+
+    // Also check on any navigation
+    const originalPushState = window.history.pushState;
+    window.history.pushState = function (...args) {
+      originalPushState.apply(window.history, args);
+      checkRoute();
+    };
+
+    return () => {
+      window.removeEventListener('popstate', checkRoute);
+      window.history.pushState = originalPushState;
+    };
+  }, []);
 
   // Simple background polling - replaces complex background services
-  useBackgroundPolling(isAuthenticated && isBusinessSetup);
+  // Don't poll on customer-facing routes
+  useBackgroundPolling(isAuthenticated && isBusinessSetup && !isCustomerRoute);
 
   const login = (businessSetup: boolean) => {
     setIsAuthenticated(true);
