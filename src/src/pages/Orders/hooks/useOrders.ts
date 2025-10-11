@@ -2,16 +2,14 @@ import { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../../redux/store";
 import { fetchOrdersWithFilters, updateOrderStatus } from "../../../redux/reducers/OrdersReducer";
+import { setUnseenMessagesCount } from "../../../redux/reducers/TablesReducer";
 import type { DateRangeSelection } from "../../../types";
 
 import { DATE_TIME_FORMAT_UTC, formatDateAsUTC } from "../../../utils/dateUtils";
-import { ENDPOINTS, ORDER_STATUS } from "../../../Constants";
+import { ENDPOINTS, ORDER_STATUS, POLLING_INTERVALS } from "../../../Constants";
 import ApiService from "../../../services/ApiService";
 import { toast } from "react-toastify";
-
-// Global singleton to track API calls
-let hasInitialized = false;
-let initializationPromise: any = null;
+import Storage from "../../../utils/Storage";
 
 export const useOrders = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -39,25 +37,38 @@ export const useOrders = () => {
     const [detailLoading, setDetailLoading] = useState(false);
     // Initialize orders using global singleton with today's date
     useEffect(() => {
-        const initializeOrders = async () => {
-            if (hasInitialized) return;
-
-            if (initializationPromise) {
-                await initializationPromise;
-                return;
-            }
-            // Always use filtered API with today's date
-            initializationPromise = dispatch(fetchOrdersWithFilters({ startDate: formatDateAsUTC("", DATE_TIME_FORMAT_UTC), endDate: formatDateAsUTC("", DATE_TIME_FORMAT_UTC) }));
+        const fetchOrders = async () => {
+            const businessId = Storage.getItem("businessId");
+            if (!businessId) return;
 
             try {
-                await initializationPromise;
-                hasInitialized = true;
+                // Fetch orders and unseen messages count in parallel
+                const [_, unseenMessagesResponse] = await Promise.allSettled([
+                    dispatch(fetchOrdersWithFilters({
+                        startDate: formatDateAsUTC("", DATE_TIME_FORMAT_UTC),
+                        endDate: formatDateAsUTC("", DATE_TIME_FORMAT_UTC)
+                    })),
+                    ApiService.request('GET', `${ENDPOINTS.TABLES.GET_TABLE_MESSAGES_UNSEEN_COUNT}${businessId}`)
+                ]);
+
+                // Update unseen messages count if successful
+                if (unseenMessagesResponse.status === 'fulfilled' && unseenMessagesResponse.value) {
+                    dispatch(setUnseenMessagesCount(unseenMessagesResponse.value?.unseenMessagesCount || 0));
+                }
             } catch (error) {
-                initializationPromise = null;
+                console.error('Error fetching orders:', error);
             }
         };
 
-        initializeOrders();
+        // Fetch immediately on mount
+        fetchOrders();
+
+        // Set up interval polling using the same interval as background service
+        const intervalId = window.setInterval(fetchOrders, POLLING_INTERVALS.ORDERS);
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [dispatch]);
 
 

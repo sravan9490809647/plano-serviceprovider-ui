@@ -9,7 +9,7 @@ import TablesOverview from "./components/TablesOverview";
 import { Settings } from "@mui/icons-material";
 import type { Table, ReservedTableOrdersResponse, BusinessDetails } from "../../types";
 import Storage from "../../utils/Storage";
-import { ENDPOINTS } from "../../Constants";
+import { ENDPOINTS, POLLING_INTERVALS } from "../../Constants";
 import ApiService from "../../services/ApiService";
 import TableOrderDetails from "./components/TableOrderDetails";
 import { toast } from "react-toastify";
@@ -45,10 +45,20 @@ const Tables: React.FC = () => {
     );
 
     useEffect(() => {
-        if (businessId) {
-            dispatch(onFetchBusinessDetails(businessId));
+        if (!businessId) return;
+        // Fetch business details once
+        dispatch(onFetchBusinessDetails(businessId));
+        // Fetch tables immediately
+        dispatch(fetchTables(businessId));
+
+        // Set up interval polling for tables
+        const intervalId = window.setInterval(() => {
             dispatch(fetchTables(businessId));
-        }
+        }, POLLING_INTERVALS.ORDERS);
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [businessId, dispatch]);
 
     const handleTerminateSession = useCallback(async () => {
@@ -229,61 +239,61 @@ const Tables: React.FC = () => {
             />
 
             <Box p={2}>
-                {loading ? (
+                {/* {loading ? (
                     <Loader />
-                ) : (
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={selectedTableData || tableMessagesOverview.length > 0 ? 6 : 12}>
-                            <TablesOverview
-                                tables={mappedTables}
-                                fullWidth={!(selectedTableData || tableMessagesOverview.length > 0)}
-                                onTableClick={fetchReservedTableOrders}
-                            />
-                        </Grid>
-
-                        {selectedTableData ? (
-                            <Grid item xs={12} md={6}>
-                                {loadingOrderDetails ? (
-                                    <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: "calc(100vh - 120px)" }}>
-                                        <Loader />
-                                    </Box>
-                                ) : (
-                                    <TableOrderDetails
-                                        orderDetails={reservedTableOrders}
-                                        onClose={handleTableClose}
-                                        onTerminateSession={handleTerminateSession}
-                                        terminating={terminating}
-                                        tableData={selectedTableData}
-                                        onConfirmRequest={handleConfirmRequest}
-                                        onHandlePrintBill={handlePrintBill}
-                                        printingBill={printingBill}
-                                    />
-                                )}
-                            </Grid>
-                        ) : (tableMessagesOverview.length > 0 || loadingMessages) ? (
-                            <Grid item xs={12} md={6}>
-                                {loadingMessages ? (
-                                    <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: "calc(100vh - 120px)" }}>
-                                        <Loader />
-                                    </Box>
-                                ) : (
-                                    notificationType === "messages" ? (
-                                        <TableMessages
-                                            messages={tableMessagesOverview}
-                                            onClose={handleMessagesClose}
-                                        />
-                                    ) : (
-                                        <CustomerRequests
-                                            requests={tableMessagesOverview}
-                                            onConfirm={handleConfirmRequest}
-                                            onClose={handleMessagesClose}
-                                        />
-                                    )
-                                )}
-                            </Grid>
-                        ) : null}
+                ) : ( */}
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={selectedTableData || tableMessagesOverview.length > 0 ? 6 : 12}>
+                        <TablesOverview
+                            tables={mappedTables}
+                            fullWidth={!(selectedTableData || tableMessagesOverview.length > 0)}
+                            onTableClick={fetchReservedTableOrders}
+                        />
                     </Grid>
-                )}
+
+                    {selectedTableData ? (
+                        <Grid item xs={12} md={6}>
+                            {loadingOrderDetails ? (
+                                <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: "calc(100vh - 120px)" }}>
+                                    <Loader />
+                                </Box>
+                            ) : (
+                                <TableOrderDetails
+                                    orderDetails={reservedTableOrders}
+                                    onClose={handleTableClose}
+                                    onTerminateSession={handleTerminateSession}
+                                    terminating={terminating}
+                                    tableData={selectedTableData}
+                                    onConfirmRequest={handleConfirmRequest}
+                                    onHandlePrintBill={handlePrintBill}
+                                    printingBill={printingBill}
+                                />
+                            )}
+                        </Grid>
+                    ) : (tableMessagesOverview.length > 0 || loadingMessages) ? (
+                        <Grid item xs={12} md={6}>
+                            {loadingMessages ? (
+                                <Box display="flex" justifyContent="center" alignItems="center" sx={{ height: "calc(100vh - 120px)" }}>
+                                    <Loader />
+                                </Box>
+                            ) : (
+                                notificationType === "messages" ? (
+                                    <TableMessages
+                                        messages={tableMessagesOverview}
+                                        onClose={handleMessagesClose}
+                                    />
+                                ) : (
+                                    <CustomerRequests
+                                        requests={tableMessagesOverview}
+                                        onConfirm={handleConfirmRequest}
+                                        onClose={handleMessagesClose}
+                                    />
+                                )
+                            )}
+                        </Grid>
+                    ) : null}
+                </Grid>
+                {/* )} */}
             </Box>
         </Box>
     );

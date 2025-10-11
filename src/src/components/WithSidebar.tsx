@@ -47,7 +47,7 @@ const WithSidebar: React.FC<{
           backgroundColor: themeColors.primary,
           height: "100%",
           overflowY: "auto",
-          ml: showSidebar ? (isMobile ? 0 : collapsed ? "80px" : "260px") : 0,
+          ml: showSidebar ? (isMobile ? 0 : collapsed ? "80px" : "240px") : 0,
           transition: "margin-left 0.3s ease",
         }}
       >

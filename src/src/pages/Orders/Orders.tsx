@@ -54,10 +54,10 @@ const Orders: React.FC = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Loading state
-  if (loading) {
-    return <Loader />;
-  }
+  // // Loading state
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   // Error state
   if (error) {

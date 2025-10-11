@@ -32,6 +32,7 @@ export interface Order {
 
 interface OrdersState {
     orders: Order[];
+    orderedCount: number;
     loading: boolean;
     error: string | null;
 }
@@ -87,6 +88,7 @@ export const fetchOrdersWithFilters = createAsyncThunk(
 
 const initialState: OrdersState = {
     orders: [],
+    orderedCount: 0,
     loading: false,
     error: null,
 };
@@ -112,6 +114,9 @@ const ordersSlice = createSlice({
             if (orderIndex !== -1) {
                 state.orders[orderIndex].orderStatus = status;
             }
+        },
+        setOrderedCount: (state, action) => {
+            state.orderedCount = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -149,5 +154,5 @@ const ordersSlice = createSlice({
     },
 });
 
-export const { clearOrders, silentUpdateOrders, updateOrderStatus } = ordersSlice.actions;
+export const { clearOrders, silentUpdateOrders, updateOrderStatus, setOrderedCount } = ordersSlice.actions;
 export default ordersSlice.reducer; 
