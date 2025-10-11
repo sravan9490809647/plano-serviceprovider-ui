@@ -266,7 +266,9 @@ const BusinessSetupForm: React.FC<{
       if (window.ReactNativeWebView) {
         const message = JSON.stringify({
           type: "SET_PRINTER_CONNECTION",
-          printerIpAddress: printerIpAddress.trim(),
+          data: {
+            printerIpAddress: printerIpAddress.trim(),
+          },
         });
         window.ReactNativeWebView.postMessage(message);
       } else {
@@ -288,28 +290,18 @@ const BusinessSetupForm: React.FC<{
     };
 
     const handleTestPrinterConnection = async (printerIpAddress: string) => {
-      if (!printerIpAddress.trim()) {
-        toast.error("Please enter a printer IP address");
-        return;
-      }
-      setTestingConnection(true);
-
-      try {
-        // Send printer IP to React Native WebView
-        if (window.ReactNativeWebView) {
-          const message = JSON.stringify({
-            type: "TEST_PRINTER_CONNECTION",
+      // Send printer IP to React Native WebView
+      if (window.ReactNativeWebView) {
+        const message = JSON.stringify({
+          type: "TEST_PRINTER_CONNECTION",
+          data: {
             printerIpAddress: printerIpAddress.trim(),
-          });
-          window.ReactNativeWebView.postMessage(message);
-        } else {
-          // Fallback for web testing
-          toast.info(`Testing connection can be done only on mobile app`);
-        }
-      } catch (error) {
-        toast.error("Failed to test printer connection");
-      } finally {
-        setTestingConnection(false);
+          },
+        });
+        window.ReactNativeWebView.postMessage(message);
+      } else {
+        // Fallback for web testing
+        toast.info(`Testing connection can be done only on mobile app`);
       }
     };
 
@@ -560,8 +552,8 @@ const BusinessSetupForm: React.FC<{
             />
             <CustomButton
               fullWidth
-              onClick={() => handleTestPrinterConnection(printerIpAddress.trim())}
-              disabled={testingConnection || !printerIpAddress.trim()}
+              onClick={() => handleTestPrinterConnection(printerIpAddress)}
+              disabled={!printerIpAddress?.trim()}
               sx={{ mt: 1 }}
             >
               {testingConnection ? "Testing Connection..." : "Test Connection"}
