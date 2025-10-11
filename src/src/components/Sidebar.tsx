@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const menuItems = [
     // { label: "Dashboard", icon: <DashboardIcon />, path: "/" },
-    { label: "Today Orders", icon: <ShoppingCartIcon />, path: "/orders", count: orderedCount },
+    { label: "Orders", icon: <ShoppingCartIcon />, path: "/orders", count: orderedCount },
     { label: "Tables", icon: <TableRestaurantIcon />, path: "/tables" },
     { label: "Manage Tables", icon: <Settings />, path: "/manage-tables" },
   ];
