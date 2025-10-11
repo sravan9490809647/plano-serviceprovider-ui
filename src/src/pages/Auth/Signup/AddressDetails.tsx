@@ -84,11 +84,8 @@ const AddressDetails: React.FC<IAddressDetails> = ({
     }
 
     // Post Code validation
-    const postCodeRegex = /^[0-9]{4,10}$/; // Accepts 4 to 10 digits
     if (!formData.postCode.trim()) {
       newErrors.postCode = "Post Code is required.";
-    } else if (!postCodeRegex.test(formData.postCode)) {
-      newErrors.postCode = "Invalid Post Code format.";
     }
 
     setErrors(newErrors);
