@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid, Avatar } from "@mui/material";
 import Input from "../../components/Input";
 import CustomButton from "../../components/Button";
 import Select from "../../components/Select";
@@ -26,6 +26,7 @@ import Storage from "../../utils/Storage";
 // import BusinessOptionCard from "./components/BusinessOptionCard";
 // import PaymentSetup from "./components/PaymentSetup";
 import { uploadImage } from "../../redux/reducers/MenusReducer";
+import { maskEmail, maskPhone } from "../../utils/common";
 import ApiService from "../../services/ApiService";
 import { ENDPOINTS, PredefinedAmenities } from "../../Constants";
 import axios from "axios";
@@ -72,6 +73,24 @@ const parkingOptions = [
   { label: "No Parking Available", value: "none" },
 ];
 
+const InfoRow: React.FC<{ icon: string; text: string }> = ({ icon, text }) => (
+  <Box display="flex" alignItems="center" gap={2}>
+    <Box
+      component="span"
+      sx={{
+        fontSize: 24,
+        width: 32,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {icon}
+    </Box>
+    <Typography color="text.secondary">{text}</Typography>
+  </Box>
+);
+
 const BusinessSetupForm: React.FC<{
   disableHeading?: boolean;
   showBusinessName?: boolean;
@@ -93,6 +112,7 @@ const BusinessSetupForm: React.FC<{
     const [bio, setBio] = useState("");
     const [process, setProcess] = useState("");
     const [businessName, setBusinessName] = useState("");
+    const [printerIpAddress, setPrinterIpAddress] = useState("");
     const [googleReviewLink, setGoogleReviewLink] = useState("");
     const [amenities, setAmenities] = useState<string[]>([]);
     const [customAmenities, setCustomAmenities] = useState<string[]>([]);
@@ -117,10 +137,41 @@ const BusinessSetupForm: React.FC<{
       "UPI / Wallets": false,
       PayPal: false,
     });
+    const [userData, setUserData] = useState({
+      fullName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      businessName: "",
+      location: "",
+    });
+    const [testingConnection, setTestingConnection] = useState(false);
 
     useEffect(() => {
       dispatch(onFetchBusinessDetails(businessId));
+      fetchUserData();
     }, [businessId, dispatch]);
+
+    const fetchUserData = async () => {
+      try {
+        const response = await ApiService.request(
+          "GET",
+          `${ENDPOINTS.USER.GET_PROFILE}`
+        );
+        if (response.status === 1 && response.data) {
+          setUserData({
+            fullName: response.data.fullName || "",
+            lastName: response.data.lastName || "",
+            email: response.data.email || "",
+            mobile: response.data.mobile || "",
+            businessName: StorageService.getItem("businessName") || "",
+            location: response.data?.location || `${response.data?.city || ""}${response.data?.city && response.data?.country ? ", " : ""}${response.data?.country || ""}`,
+          });
+        }
+      } catch (error) {
+        toast.error("Failed to fetch user data");
+      }
+    };
 
     useEffect(() => {
       if (!businessDetails) return;
@@ -128,7 +179,11 @@ const BusinessSetupForm: React.FC<{
       setBio(businessDetails.description || "");
       setProcess(businessDetails.process || "");
       setBusinessName(businessDetails.businessName || "");
+      setPrinterIpAddress(businessDetails.printerIpAddress || "");
       setGoogleReviewLink(businessDetails.googleReviewLink || "");
+      if (businessDetails.printerIpAddress) {
+        handleSetPrinterConnection(businessDetails.printerIpAddress);
+      }
       if (businessDetails.amenities) {
         const parsed = JSON.parse(businessDetails.amenities);
 
@@ -207,6 +262,20 @@ const BusinessSetupForm: React.FC<{
       }
     }, [businessDetails]);
 
+    const handleSetPrinterConnection = async (printerIpAddress: string) => {
+      if (window.ReactNativeWebView) {
+        const message = JSON.stringify({
+          type: "SET_PRINTER_CONNECTION",
+          data: {
+            printerIpAddress: printerIpAddress.trim(),
+          },
+        });
+        window.ReactNativeWebView.postMessage(message);
+      } else {
+        // Fallback for web testing
+        toast.info(`Setting connection can be done only on mobile app`);
+      }
+    };
     const handleChange = <K extends keyof DayHour>(
       index: number,
       field: K,
@@ -218,6 +287,22 @@ const BusinessSetupForm: React.FC<{
         [field]: value,
       };
       setHours(updated);
+    };
+
+    const handleTestPrinterConnection = async (printerIpAddress: string) => {
+      // Send printer IP to React Native WebView
+      if (window.ReactNativeWebView) {
+        const message = JSON.stringify({
+          type: "TEST_PRINTER_CONNECTION",
+          data: {
+            printerIpAddress: printerIpAddress.trim(),
+          },
+        });
+        window.ReactNativeWebView.postMessage(message);
+      } else {
+        // Fallback for web testing
+        toast.info(`Testing connection can be done only on mobile app`);
+      }
     };
 
     const validate = (): boolean => {
@@ -301,6 +386,7 @@ const BusinessSetupForm: React.FC<{
       const payload = {
         bId: businessId,
         description: bio?.trim() || "",
+        printerIpAddress: printerIpAddress?.trim() || "",
         process: process?.trim() || "",
         googleReviewLink: googleReviewLink?.trim() || "",
         amenities: JSON.stringify({
@@ -358,6 +444,9 @@ const BusinessSetupForm: React.FC<{
         setLoading(false);
         if (response.status === 1) {
           toast.success(response.message);
+          if (printerIpAddress?.trim()) {
+            handleSetPrinterConnection(printerIpAddress.trim());
+          }
           StorageService.setItem("businessName", response?.businessName || "");
           localStorage.setItem("businessSetup", String(true));
           authLogin(true);
@@ -424,7 +513,52 @@ const BusinessSetupForm: React.FC<{
               clearError={clearError}
             />
           </Section>
-
+          <Section
+            title="Account Details"
+          >
+            <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Avatar
+                sx={{
+                  bgcolor: "#2563eb",
+                  width: 40,
+                  height: 40,
+                  fontSize: 20,
+                }}
+              >
+                {userData.fullName?.[0]?.toUpperCase() || ""}
+              </Avatar>
+              <Typography variant="h6">
+                {userData.fullName} {userData.lastName}
+              </Typography>
+            </Box>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <InfoRow icon="📧" text={maskEmail(userData.email)} />
+              <InfoRow icon="📞" text={maskPhone(userData.mobile)} />
+              <InfoRow icon="👤" text={userData.businessName || "--"} />
+              <InfoRow icon="📍" text={userData.location || "--"} />
+            </Box>
+          </Section>
+          <Section
+            title="Printer Settings"
+            subtitle="LAN/TCP Printer IP Address"
+          >
+            <Input
+              label="Printer IP Address"
+              placeholder="192.168.1.50"
+              fullWidth
+              value={printerIpAddress}
+              onChange={(e) => setPrinterIpAddress(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+            <CustomButton
+              fullWidth
+              onClick={() => handleTestPrinterConnection(printerIpAddress)}
+              disabled={!printerIpAddress?.trim()}
+              sx={{ mt: 1 }}
+            >
+              {testingConnection ? "Testing Connection..." : "Test Connection"}
+            </CustomButton>
+          </Section>
           <Section
             title="Amenities"
             subtitle="Select all amenities that apply to your business"

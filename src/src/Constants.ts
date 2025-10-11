@@ -106,6 +106,9 @@ export const ENDPOINTS = {
     ALL: "Receipts/All?BusinessId=",
     WITH_DATE_FILTERS: "Receipts/WithDateFilters?BusinessId=",
   },
+  USER: {
+    GET_PROFILE: "ServiceProvider/Auth/GetProfileInfo",
+  }
 };
 export const COLORS = {
   PRIMARY: "#1976d2",

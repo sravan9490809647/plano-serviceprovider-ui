@@ -96,6 +96,7 @@ export interface BrandAssetsState {
 export interface BusinessDetails {
   bId: string;
   businessName: string;
+  printerIpAddress?: string;
   description: string;
   process: string;
   amenities: string;
@@ -413,6 +414,7 @@ export interface Offer {
 export interface BusinessDetails {
   bId: string;
   businessName: string;
+  printerIpAddress?: string;
   description: string;
   amenities: string;
   parkingInformation: string;
