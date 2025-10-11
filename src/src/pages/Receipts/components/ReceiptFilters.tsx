@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Input from "../../../components/Input";
 import DateRangeFilter from "../../../components/DateRangeFilter";
 import type { DateRangeSelection } from "../../../types";
+import { COLORS } from "../../../Constants";
 
 interface ReceiptFiltersProps {
     searchTerm: string;
@@ -33,9 +34,10 @@ const ReceiptFilters: React.FC<ReceiptFiltersProps> = ({
                     <Input
                         fullWidth
                         placeholder={"Search by table name"}
-                        startIcon={<SearchIcon color="action" />}
-                        inputStyles={{ padding: "12px" }}
+                        startIcon={<SearchIcon color="action" sx={{ color: COLORS.BLACK }} />}
+                        inputStyles={{ padding: "12px", color: "#737373" }}
                         value={searchTerm}
+                        sx={{ backgroundColor: COLORS.SEARCH_BOX_BG, borderWidth: "0px", borderColor: COLORS.SEARCH_BOX_BG }}
                         onChange={onSearchChange}
                     />
                 </Grid>

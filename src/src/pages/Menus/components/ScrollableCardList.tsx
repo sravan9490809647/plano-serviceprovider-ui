@@ -8,10 +8,13 @@ import CustomButton from "../../../components/Button";
 import { Add, Delete } from "@mui/icons-material";
 import type { MenuItem } from "../../../types";
 import DraggableMenuItem from "./DraggableMenuItem";
+import { TEXT_COLORS } from "../../../Constants";
+import RoundBadge from "../../../components/RoundBadge";
 
 interface ScrollableCardListProps {
   category: {
     title: string;
+    order: number;
   };
   items: MenuItem[];
   onAddItem?: () => void;
@@ -82,7 +85,14 @@ const ScrollableCardList: React.FC<ScrollableCardListProps> = ({
         sx={{ pl: 3 }} // Add left padding to make room for the drag handle
       >
         <Stack direction="row" alignItems="center" spacing={1.5}>
-          <Typography variant="h4">{category.title}</Typography>
+          <Typography variant="h4" sx={{ color: TEXT_COLORS.PRIMARY, marginLeft: 10 }}>{category.title}</Typography>
+          <RoundBadge
+            size={28}
+            sx={{ position: "relative", top: 0, left: 0 }}
+          >
+            {category.order}
+          </RoundBadge>
+
           <IconButton
             size="small"
             onClick={onEditCategory}
@@ -109,16 +119,19 @@ const ScrollableCardList: React.FC<ScrollableCardListProps> = ({
           </IconButton>
         </Stack>
 
-        <CustomButton
-          startIcon={<Add fontSize="small" />}
-          sx={{
-            textTransform: "none",
-            fontWeight: 600,
-          }}
-          onClick={onAddItem}
-        >
-          Add New
-        </CustomButton>
+        <Stack direction="row" alignItems="center" spacing={1.5}>
+          <Typography variant="h5" sx={{ marginRight: 10 }}>Total Items: <span style={{ fontWeight: 600, color: TEXT_COLORS.PRIMARY }}>{items.length}</span></Typography>
+          <CustomButton
+            startIcon={<Add fontSize="small" />}
+            sx={{
+              textTransform: "none",
+              fontWeight: 600,
+            }}
+            onClick={onAddItem}
+          >
+            Add New
+          </CustomButton>
+        </Stack>
       </Stack>
 
       {showLeftIcon && (

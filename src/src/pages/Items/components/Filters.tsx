@@ -3,6 +3,7 @@ import { type SelectChangeEvent } from "@mui/material";
 import Input from "../../../components/Input";
 import Select from "../../../components/Select";
 import { Search } from "@mui/icons-material";
+import { COLORS } from "../../../Constants";
 
 interface FiltersProps {
   search: string;
@@ -25,12 +26,13 @@ const Filters: React.FC<FiltersProps> = ({
     <Input
       fullWidth
       placeholder="Search items..."
-      startIcon={<Search color="action" />}
+      startIcon={<Search color="action" sx={{ color: COLORS.BLACK }} />}
       value={search}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         handleSearchChange(e.target.value)
       }
-      inputStyles={{ padding: "12px" }}
+      sx={{ backgroundColor: COLORS.SEARCH_BOX_BG, borderWidth: "0px", borderColor: COLORS.SEARCH_BOX_BG }}
+      inputStyles={{ padding: "12px", color: "#737373" }}
     />
   ) : (
     <Select

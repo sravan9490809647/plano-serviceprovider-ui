@@ -677,7 +677,7 @@ const menusSlice = createSlice({
           const categoryId = action.payload.categoryId;
 
           // Remove the category from categoryWithItems
-          state.categoryWithItems = state.categoryWithItems.filter(
+          state.categoryWithItems = state.categoryWithItems?.filter(
             cat => cat.category.id !== categoryId
           );
 

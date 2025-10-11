@@ -52,12 +52,20 @@ const Select: React.FC<SelectProps> = ({
         "& .MuiOutlinedInput-root": {
           borderRadius: 2,
           height: "48px",
+          display: "flex",
+          alignItems: "center",
           ...selectSx, // you can override height, padding, etc.
         },
         "& .MuiSelect-select": {
           display: "flex",
           alignItems: "center",
-          padding: "12px",
+          padding: "12px 14px",
+        },
+        "& .MuiInputLabel-root": {
+          transform: "translate(14px, 12px) scale(1)",
+          "&.MuiInputLabel-shrink": {
+            transform: "translate(14px, -9px) scale(0.75)",
+          },
         },
       }}
       SelectProps={{
