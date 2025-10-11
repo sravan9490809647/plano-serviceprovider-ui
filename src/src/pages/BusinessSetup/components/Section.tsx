@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import CustomPaperWrapper from "../../../components/CustomPaperWrapper";
+import { TEXT_COLORS } from "../../../Constants";
 
 const Section: React.FC<{
   title: string;
@@ -7,7 +8,7 @@ const Section: React.FC<{
   children: React.ReactNode;
 }> = ({ title, subtitle, children }) => (
   <CustomPaperWrapper>
-    <Typography variant="h4" mb={1}>
+    <Typography variant="h4" mb={1} sx={{ color: TEXT_COLORS.PRIMARY }}>
       {title}
     </Typography>
     {subtitle && (

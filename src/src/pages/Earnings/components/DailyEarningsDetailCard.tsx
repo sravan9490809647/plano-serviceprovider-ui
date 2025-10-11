@@ -14,7 +14,7 @@ const DailyEarningsDetailCard: React.FC<DailyEarningsDetailCardProps> = ({
   selectedDate
 }) => {
   return (
-    <Paper elevation={0} sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Paper elevation={0} sx={{ p: 3, display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography variant="h5" color="text.secondary">
           Daily Earnings Detail
@@ -25,21 +25,19 @@ const DailyEarningsDetailCard: React.FC<DailyEarningsDetailCardProps> = ({
       </Box>
       <Grid container spacing={2} mt={6}>
         <Grid item xs={6} textAlign="center">
-          <Typography variant="h5" sx={{ fontFamily: `${FONT_FAMILY.BOLD} !important` }}>
-            {formatPrice(periodEarnings?.earnings || 0)}
-
+          <Typography variant="h6" color="text.secondary">
+            Total Orders
           </Typography>
+          <Typography variant="h1">
+            {periodEarnings?.totalOrders}
+          </Typography>
+        </Grid>
+        <Grid item xs={6} textAlign="center">
           <Typography variant="h6" color="text.secondary">
             Total Earnings
           </Typography>
-        </Grid>
-
-        <Grid item xs={6} textAlign="center">
-          <Typography variant="h5" sx={{ fontFamily: `${FONT_FAMILY.BOLD} !important` }}>
-            {periodEarnings?.totalOrders}
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            Total Orders
+          <Typography variant="h1">
+            {formatPrice(periodEarnings?.earnings || 0)}
           </Typography>
         </Grid>
       </Grid>

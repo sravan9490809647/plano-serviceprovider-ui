@@ -34,7 +34,7 @@ import { APP_NAME, FONT_FAMILY } from "../Constants";
 import DialogWrapper from "./DialogWrapper";
 import Storage from "../utils/Storage";
 import { useAuth } from "../context/AuthContext";
-import { Money, Print, Receipt, ReceiptLong, Settings } from "@mui/icons-material";
+import { Money, ReceiptLong, Settings } from "@mui/icons-material";
 // import { LocalOffer, Money } from "@mui/icons-material";
 
 interface SidebarProps {
@@ -58,17 +58,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   const businessId = Storage.getItem("businessId");
   const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false);
 
-  // Get orders from Redux
-  const { orders } = useSelector((state: RootState) => state.orders);
-
-  // Calculate ordered count
-  const orderedCount = React.useMemo(() => {
-    return orders.filter(order => order.orderStatus === 'Ordered').length;
-  }, [orders]);
+  // Get ordered count from Redux
+  const { orderedCount } = useSelector((state: RootState) => state.orders);
 
   const menuItems = [
     // { label: "Dashboard", icon: <DashboardIcon />, path: "/" },
-    { label: "Today Orders", icon: <ShoppingCartIcon />, path: "/orders", count: orderedCount },
+    { label: "Orders", icon: <ShoppingCartIcon />, path: "/orders", count: orderedCount },
     { label: "Tables", icon: <TableRestaurantIcon />, path: "/tables" },
     { label: "Manage Tables", icon: <Settings />, path: "/manage-tables" },
   ];
@@ -104,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     },
   ];
 
-  const drawerWidth = collapsed && !isMobile ? 80 : 260;
+  const drawerWidth = collapsed && !isMobile ? 80 : 240;
 
   const handleLogout = () => {
     setLogoutDialogOpen(false);
@@ -152,8 +147,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                       backgroundColor: theme.palette.primary.main,
                       color: 'white',
                       borderRadius: '50%',
-                      // width: 20,
-                      // height: 20,
+                      width: 30,
+                      height: 30,
                       padding: "4px 8px",
                       display: 'flex',
                       alignItems: 'center',

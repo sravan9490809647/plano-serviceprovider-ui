@@ -10,6 +10,8 @@ import { useOrders } from "./hooks/useOrders";
 
 import OrderDetailsDialog from "./components/OrderDetailsDialog";
 import { FONT_FAMILY } from "../../Constants";
+import CustomButton from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 const Orders: React.FC = () => {
   const {
@@ -40,6 +42,7 @@ const Orders: React.FC = () => {
     handleCloseDialog
   } = useOrders();
 
+  const navigate = useNavigate();
   // Calculate ordered count
   const orderedCount = React.useMemo(() => {
     return filteredOrders.filter(order => order.orderStatus === 'Ordered').length;
@@ -54,10 +57,10 @@ const Orders: React.FC = () => {
     setSearchTerm(event.target.value);
   };
 
-  // Loading state
-  if (loading) {
-    return <Loader />;
-  }
+  // // Loading state
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   // Error state
   if (error) {
@@ -66,18 +69,25 @@ const Orders: React.FC = () => {
 
   return (
     <Box>
-      <StickyBox sx={{ alignItems: "center", gap: 2 }}>
-        <Typography variant="h3">Orders</Typography>
-        <Chip
-          label={`${orderedCount}`}
-          color="primary"
-          variant="filled"
-          sx={{
-            backgroundColor: orderedCount > 0 ? '#1976d2' : '#e0e0e0',
-            color: orderedCount > 0 ? 'white' : '#666',
-            fontFamily: FONT_FAMILY.SEMI_BOLD
-          }}
-        />
+      <StickyBox sx={{ alignItems: "center", gap: 2, justifyContent: "space-between" }}>
+        <Box display="flex" gap={2}>
+          <Typography variant="h3">Orders</Typography>
+          <Chip
+            label={`${orderedCount}`}
+            color="primary"
+            variant="filled"
+            sx={{
+              backgroundColor: orderedCount > 0 ? '#1976d2' : '#e0e0e0',
+              color: orderedCount > 0 ? 'white' : '#666',
+              fontFamily: FONT_FAMILY.SEMI_BOLD
+            }}
+          />
+        </Box>
+        <CustomButton variant="contained" color="primary" onClick={() => {
+          navigate('/orders-history');
+        }}>
+          Orders History
+        </CustomButton>
       </StickyBox>
 
       <Box px={2}>
