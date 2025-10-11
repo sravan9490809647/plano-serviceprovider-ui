@@ -226,9 +226,9 @@ const BusinessSetupForm: React.FC<{
       if (!bio.trim()) {
         errs.bio = "Business description is required.";
       }
-      if (!address.instructions.trim()) {
-        errs.instructions = "Pickup instructions are required.";
-      }
+      // if (!address.instructions.trim()) {
+      //   errs.instructions = "Pickup instructions are required.";
+      // }
 
       setErrors(errs);
       return Object.keys(errs).length === 0;
