@@ -20,19 +20,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const stored = localStorage.getItem("businessSetup");
     return stored === "true";
   });
-  const [isCustomerRoute, setIsCustomerRoute] = useState(false);
 
-  // Check if current route is a customer-facing URL
+  // Helper function to check if current route is a customer-facing URL
+  const checkIfCustomerRoute = (path: string) => {
+    // Customer routes contain GUID pattern: /:guid or /:guid/checkout
+    // GUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    const guidPattern = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
+    const customerRoutePattern = new RegExp(`^\\/${guidPattern}(?:\\/checkout)?$`);
+    return customerRoutePattern.test(path);
+  };
+
+  const [isCustomerRoute, setIsCustomerRoute] = useState(() => {
+    // Initialize with current path to avoid initial polling on customer routes
+    return checkIfCustomerRoute(window.location.pathname);
+  });
+
+  // Listen for route changes
   useEffect(() => {
     const checkRoute = () => {
-      const path = window.location.pathname;
-
-      // Customer routes contain GUID pattern: /:guid or /:guid/checkout
-      // GUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-      const guidPattern = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
-      const customerRoutePattern = new RegExp(`^\\/${guidPattern}(?:\\/checkout)?$`);
-
-      setIsCustomerRoute(customerRoutePattern.test(path));
+      setIsCustomerRoute(checkIfCustomerRoute(window.location.pathname));
     };
 
     // Check initially
