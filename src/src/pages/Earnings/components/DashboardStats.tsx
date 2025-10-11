@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import CalendarCard from "./CalendarCard";
 import DailyEarningsDetailCard from "./DailyEarningsDetailCard";
 import CustomPaperWrapper from "../../../components/CustomPaperWrapper";
@@ -18,14 +18,10 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ dayEarnings, selectedDa
     <CustomPaperWrapper sx={{ mb: 3 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={4}>
-          <Box sx={{ height: '400px' }}>
-            <CalendarCard selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-          </Box>
+          <CalendarCard selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         </Grid>
         <Grid item xs={12} sm={6} md={8}>
-          <Box sx={{ height: '400px' }}>
-            <DailyEarningsDetailCard periodEarnings={dayEarnings} selectedDate={selectedDate} />
-          </Box>
+          <DailyEarningsDetailCard periodEarnings={dayEarnings} selectedDate={selectedDate} />
         </Grid>
       </Grid>
     </CustomPaperWrapper>

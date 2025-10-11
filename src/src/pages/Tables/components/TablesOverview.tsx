@@ -86,12 +86,12 @@ const TablesOverview: React.FC<TablesOverviewProps> = ({ tables, onTableClick, f
 
     const gridItemSize = useMemo(() => ({
         xs: 2.4,
-        sm: 2,
+        sm: fullWidth ? 2 : 2.4,
         lg: fullWidth ? 1 : 1.5
     }), [fullWidth]);
 
     return (
-        <CustomPaperWrapper sx={{ height: "calc(100vh - 120px)", display: "flex", flexDirection: "column" }}>
+        <CustomPaperWrapper sx={{ height: { lg: "calc(100vh - 120px)" }, display: "flex", flexDirection: "column" }}>
             <Box display="flex" alignItems="center" mb={2} sx={{ flexShrink: 0 }}>
                 <Avatar
                     sx={{
