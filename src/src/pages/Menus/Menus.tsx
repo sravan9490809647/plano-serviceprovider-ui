@@ -189,7 +189,7 @@ const Menus: React.FC = () => {
   };
 
   const hasItems = categoryWithItems.length > 0;
-  const filteredCategoryWithItems = categoryWithItems.filter((menu) => {
+  const filteredCategoryWithItems = categoryWithItems?.filter((menu) => {
     const search = searchTerm.trim().toLowerCase();
     if (!search) return true;
 

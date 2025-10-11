@@ -112,6 +112,12 @@ export const COLORS = {
   SECONDARY: "#FFFFFF",
   TERTIARY: "#000000",
   ERROR: "#DC2626",
+  BLACK: "#000000",
+  SEARCH_BOX_BG: "#B8F3EE",
+};
+
+export const TEXT_COLORS = {
+  PRIMARY: "#16ae9f",
 };
 
 export const BUTTON_COLORS = {
@@ -148,6 +154,16 @@ export const FONT_FAMILY = {
   MEDIUM: "SpaceGroteskMedium",
   SEMI_BOLD: "SpaceGroteskSemiBold",
   LIGHT: "SpaceGroteskLight",
+};
+
+export const FONT_SIZE = {
+  SMALL: "12px",
+  MEDIUM: "14px",
+  LARGE: "16px",
+  XLARGE: "18px",
+  XXLARGE: "20px",
+  XXXLARGE: "22px",
+  XXXXLARGE: "24px",
 };
 
 export const Offers: OfferDefinition[] = [

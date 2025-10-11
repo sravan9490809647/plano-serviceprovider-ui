@@ -5,7 +5,7 @@ import Input from "../../../components/Input";
 import DateRangeFilter from "../../../components/DateRangeFilter";
 import type { DateRangeSelection } from "../../../types";
 import OrderStatusChip from "./OrderStatusChip";
-import { ORDER_STATUS_CHIPS } from "../../../Constants";
+import { COLORS, ORDER_STATUS_CHIPS } from "../../../Constants";
 
 interface OrderFiltersProps {
     searchTerm: string;
@@ -50,9 +50,10 @@ const OrderFilters: React.FC<OrderFiltersProps> = ({
                 <Input
                     fullWidth
                     placeholder={source === "orders" ? "Search by customer name" : "Search by table name"}
-                    startIcon={<SearchIcon color="action" />}
-                    inputStyles={{ padding: "12px" }}
+                    startIcon={<SearchIcon color="action" sx={{ color: COLORS.BLACK }} />}
+                    inputStyles={{ padding: "12px", color: "#737373" }}
                     value={searchTerm}
+                    sx={{ backgroundColor: COLORS.SEARCH_BOX_BG, borderWidth: "0px", borderColor: COLORS.SEARCH_BOX_BG }}
                     onChange={onSearchChange}
                 />
             </Grid>

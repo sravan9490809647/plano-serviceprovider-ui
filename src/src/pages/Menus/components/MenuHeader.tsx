@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Input from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { StickyBox } from "../../../Styles";
-import { FONT_FAMILY } from "../../../Constants";
+import { COLORS, FONT_FAMILY } from "../../../Constants";
 
 const MenuHeader: React.FC<{
   onClickCategory: () => void;
@@ -57,8 +57,9 @@ const MenuHeader: React.FC<{
               <Input
                 fullWidth
                 placeholder="Search menus or categories..."
-                startIcon={<SearchIcon color="action" />}
-                inputStyles={{ padding: "12px" }}
+                startIcon={<SearchIcon color="action" sx={{ color: COLORS.BLACK }} />}
+                inputStyles={{ padding: "12px", color: "#737373" }}
+                sx={{ backgroundColor: COLORS.SEARCH_BOX_BG, borderWidth: "0px", borderColor: COLORS.SEARCH_BOX_BG }}
                 onChange={(e) => onSearchChange(e.target.value)}
               />
             </Grid>

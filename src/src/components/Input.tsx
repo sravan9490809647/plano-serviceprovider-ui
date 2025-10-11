@@ -1,10 +1,12 @@
 import React from "react";
 import { TextField } from "@mui/material";
 import type { TextFieldProps } from "@mui/material";
+import { COLORS } from "../Constants";
 
 type CustomInputProps = TextFieldProps & {
   startIcon?: React.ReactNode;
   inputStyles?: React.CSSProperties;
+  sx?: any;
 };
 
 const Input: React.FC<CustomInputProps> = ({
@@ -41,9 +43,21 @@ const Input: React.FC<CustomInputProps> = ({
         "& .MuiOutlinedInput-root": {
           borderRadius: 2,
           fontSize: 14,
-          "&.Mui-error": {
+          "& fieldset": {
+            borderColor: sx?.borderColor || COLORS.BLACK,
+            borderWidth: sx?.borderWidth || "1px",
+          },
+          "&.Mui-error fieldset": {
             borderColor: "red",
           },
+          "&.Mui-focused fieldset": {
+            borderColor: sx?.borderColor || COLORS.BLACK,
+            borderWidth: sx?.borderWidth || "1px"
+          },
+          "&:hover fieldset": {
+            borderColor: sx?.borderColor || COLORS.BLACK,
+            borderWidth: sx?.borderWidth || "1px"
+          }
         },
         "& .MuiFormHelperText-root": {
           color: error ? "red" : "inherit",

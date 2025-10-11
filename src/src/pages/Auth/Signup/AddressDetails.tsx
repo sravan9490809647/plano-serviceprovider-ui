@@ -83,12 +83,12 @@ const AddressDetails: React.FC<IAddressDetails> = ({
       newErrors.country = "Country is required.";
     }
 
-    // Zip/Postal Code validation
+    // Post Code validation
     const postCodeRegex = /^[0-9]{4,10}$/; // Accepts 4 to 10 digits
     if (!formData.postCode.trim()) {
-      newErrors.postCode = "Zip/Postal Code is required.";
+      newErrors.postCode = "Post Code is required.";
     } else if (!postCodeRegex.test(formData.postCode)) {
-      newErrors.postCode = "Invalid Zip/Postal Code format.";
+      newErrors.postCode = "Invalid Post Code format.";
     }
 
     setErrors(newErrors);
@@ -156,9 +156,8 @@ const AddressDetails: React.FC<IAddressDetails> = ({
       <Grid item xs={12} sm={6}>
         <Input
           fullWidth
-          label="Zip/Postal Code *"
+          label="Post Code *"
           name="postCode"
-          type="number"
           value={formData.postCode}
           onChange={handleChange}
           error={!!errors.postCode}

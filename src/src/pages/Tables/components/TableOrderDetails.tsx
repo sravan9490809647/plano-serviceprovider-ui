@@ -183,7 +183,7 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
                                     </Box>
 
                                     {/* Order Items */}
-                                    <Box sx={{ pl: 2 }}>
+                                    <Box sx={{ pl: 2, borderBottom: "1px solid #000" }}>
                                         {order.orderedItems.map((item, itemIndex) => {
                                             return (
                                                 <Box key={itemIndex} mb={1}>
@@ -205,9 +205,11 @@ const TableOrderDetails: React.FC<TableOrderDetailsProps> = ({
                                                 </Box>
                                             )
                                         })}
-                                        <Typography variant="h5" sx={{ textAlign: "right", borderTop: "0.5px solid #666", pt: 1 }}>
-                                            {formatPrice(order.orderDetails.totalPrice)}
-                                        </Typography>
+                                        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                                            <Typography variant="h5" sx={{ borderTop: "1px solid #000", py: 1 }}>
+                                                {formatPrice(order.orderDetails.totalPrice)}
+                                            </Typography>
+                                        </Box>
                                     </Box>
                                 </Box>
                             )

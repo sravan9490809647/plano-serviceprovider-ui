@@ -13,6 +13,7 @@ import { elipsesText } from "../../../Styles";
 import { AWS_BUCKET_BASE_URL, DEFAULT_IMAGE } from "../../../Constants";
 import { formatPrice } from "../../../utils/common";
 import CustomPaperWrapper from "../../../components/CustomPaperWrapper";
+import RoundBadge from "../../../components/RoundBadge";
 
 interface MenuCardProps {
   item: MenuItem;
@@ -36,25 +37,9 @@ const MenuCard: React.FC<MenuCardProps> = ({ item, onDelete, onEdit }) => {
       },
     }}>
       {/* Order Badge */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 8,
-          left: 50,
-          backgroundColor: "#000",
-          color: "#fff",
-          borderRadius: "50%",
-          width: 25,
-          height: 25,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "12px",
-          zIndex: 1,
-        }}
-      >
+      <RoundBadge top={8} left={50}>
         {item.order}
-      </Box>
+      </RoundBadge>
 
       {/* Edit & Delete Icons */}
       <Box
