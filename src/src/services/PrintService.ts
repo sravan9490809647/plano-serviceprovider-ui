@@ -84,8 +84,7 @@ export class PrintService {
             pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
 
             // Generate filename with timestamp
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const filename = `receipt-${options.tableName.replace(/\s+/g, '-')}-${timestamp}.pdf`;
+            const filename = `Receipt-${options.businessName}-${options.tableName.replace(/\s+/g, '-')}.pdf`;
 
             // Download the PDF
             pdf.save(filename);
@@ -179,10 +178,14 @@ export class PrintService {
             return sum + (order.orderDetails?.totalPrice || 0);
         }, 0);
 
-        // Get the order date and time from the first order (all orders should have the same date)
-        const orderDate = orderDetails.length > 0 ? new Date(orderDetails[0].orderDetails.createdOn) : new Date();
-        const orderDateString = orderDate.toLocaleDateString();
-        const orderTimeString = orderDate.toLocaleTimeString();
+        // Get the current date and time for the receipt
+        const currentDate = new Date();
+        const orderDateString = currentDate.toLocaleDateString();
+        const orderTimeString = currentDate.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
 
         const receiptDiv = document.createElement('div');
         receiptDiv.style.cssText = `

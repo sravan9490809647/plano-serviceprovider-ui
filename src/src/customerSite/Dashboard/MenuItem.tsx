@@ -99,10 +99,10 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           }
           alt={item.title}
           sx={{
-            width: { xs: 80, sm: 100 },
+            width: { xs: 120, sm: 120 },
             height: { xs: 80, sm: 100 },
-            borderRadius: 2,
-            objectFit: "cover",
+            borderRadius: 3,
+            objectFit: "contain",
             flexShrink: 0,
           }}
         />

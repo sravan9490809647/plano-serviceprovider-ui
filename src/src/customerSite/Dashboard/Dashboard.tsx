@@ -24,6 +24,7 @@ import { onFetchBusinessDetails } from "../../redux/reducers/BusinessDetailsRedu
 import { fetchTableDetails } from "../../redux/reducers/TableReducer";
 import StorageService from "../../../services/StorageService";
 import MessageDialog from "../components/MessageDialog";
+import ReceiptOptionsDialog from "./components/ReceiptOptionsDialog";
 import MenuSection from "../components/MenuSection";
 import { useActionHandlers } from "../hooks/useActionHandlers";
 import { useMenuHandlers } from "../hooks/useMenuHandlers";
@@ -59,8 +60,14 @@ const Dashboard = () => {
     messageLoading,
     messageDialogOpen,
     setMessageDialogOpen,
+    receiptDialogOpen,
+    setReceiptDialogOpen,
+    showEmailForm,
     handleActionClick,
     handleSendMessage,
+    handleReceiptOption,
+    handleSendReceiptEmail,
+    handleBackToOptions,
   } = useActionHandlers();
 
   const {
@@ -106,7 +113,6 @@ const Dashboard = () => {
       };
     }) => state.table
   );
-
   const isInitialLoading = categoriesLoading || loading || businessLoading || tableLoading;
 
   useEffect(() => {
@@ -300,6 +306,17 @@ const Dashboard = () => {
         onClose={() => setMessageDialogOpen(false)}
         onSendMessage={handleSendMessage}
         loading={messageLoading}
+      />
+
+      {/* Receipt Options Dialog */}
+      <ReceiptOptionsDialog
+        open={receiptDialogOpen}
+        onClose={() => setReceiptDialogOpen(false)}
+        onSelectOption={handleReceiptOption}
+        onSendEmail={handleSendReceiptEmail}
+        onBackToOptions={handleBackToOptions}
+        showEmailForm={showEmailForm}
+        loading={checkoutLoading}
       />
       {reservedTableOrders.length > 0 && (
         <TableOrderDetails orderDetails={reservedTableOrders} onClose={() => setReservedTableOrders([])} />

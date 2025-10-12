@@ -16,10 +16,8 @@ import Pagination from "../../../components/Pagination";
 import ReceiptActionsMenu from "./ReceiptActionsMenu";
 import ReceiptDetailsDialog from "./ReceiptDetailsDialog";
 import { useReceiptActions } from "../hooks/useReceiptActions";
-import Storage from "../../../utils/Storage";
 import { DATE_TIME_FORMAT, formatDateTime } from "../../../utils/dateUtils";
 import { formatPrice } from "../../../utils/common";
-import StorageService from "../../../../services/StorageService";
 
 interface Receipt {
     rtId: string;
