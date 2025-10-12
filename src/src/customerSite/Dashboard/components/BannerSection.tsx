@@ -400,7 +400,7 @@ const BannerSection: React.FC<IBannerSection> = ({
           fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
           fontWeight: 700,
           padding: { xs: theme => theme.spacing(1.5, 2), sm: theme => theme.spacing(2, 2.5) },
-          margin: 0,
+          marginTop: 2,
         }}
       >
         {businessName}

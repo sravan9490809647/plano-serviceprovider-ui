@@ -44,27 +44,25 @@ const CategoryList: React.FC<ICategoryList> = ({
   return (
     <Box>
       {/* Search Input */}
-      <Box>
-        <Input
-          fullWidth
-          placeholder="Search for item / food"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          startIcon={<SearchIcon sx={{ color: 'text.secondary' }} />}
-          sx={{
-            backgroundColor: 'background.paper',
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'divider',
-            },
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'primary.main',
-            },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'primary.main',
-            },
-          }}
-        />
-      </Box>
+      <Input
+        fullWidth
+        placeholder="Search for item / food"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        startIcon={<SearchIcon sx={{ color: 'text.secondary' }} />}
+        sx={{
+          backgroundColor: 'background.paper',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'divider',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'primary.main',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'primary.main',
+          },
+        }}
+      />
 
       {/* Categories */}
       <Box
@@ -72,6 +70,7 @@ const CategoryList: React.FC<ICategoryList> = ({
         alignItems="center"
         justifyContent="space-between"
         gap={1}
+        my={1}
         position="relative"
       >
         {/* Categories scrollable */}
