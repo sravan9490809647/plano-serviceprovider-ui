@@ -193,7 +193,9 @@ const CustomActionButton = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ActionIcon = styled(Box)<{ $bgColor: string }>(({ theme, $bgColor }) => ({
+const ActionIcon = styled(Box, {
+  shouldForwardProp: (prop) => prop !== '$bgColor',
+})<{ $bgColor: string }>(({ theme, $bgColor }) => ({
   width: 32, // smaller icon container on mobile
   height: 32,
   borderRadius: theme.spacing(0.6), // smaller radius
