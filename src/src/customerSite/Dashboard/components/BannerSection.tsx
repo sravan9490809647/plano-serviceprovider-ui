@@ -1,10 +1,11 @@
 import { Box, styled, Typography, Tab, Tabs } from "@mui/material";
-import { AWS_BUCKET_BASE_URL, CURRENCY, FONT_FAMILY } from "../../../Constants";
+import { AWS_BUCKET_BASE_URL, COLORS, CURRENCY, FONT_FAMILY } from "../../../Constants";
 import PersonIcon from '@mui/icons-material/Person';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import MessageIcon from '@mui/icons-material/Message';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from 'react';
+import type { BusinessDetails } from "../../../types";
 
 // Styled Components
 const MainContainer = styled(Box)(({ theme }) => ({
@@ -54,7 +55,7 @@ const NavigationTabs = styled(Tabs)(({ theme }) => ({
   "& .MuiTab-root": {
     textTransform: "none",
     minHeight: 32, // smaller height
-    fontSize: "0.8rem", // mobile font size
+    fontSize: "16px", // mobile font size
     fontWeight: 600,
     color: "#999",
     padding: theme.spacing(0.5, 0.75), // reduced horizontal padding
@@ -63,7 +64,7 @@ const NavigationTabs = styled(Tabs)(({ theme }) => ({
       color: "#333",
     },
     [theme.breakpoints.up('md')]: {
-      fontSize: "1rem", // larger desktop font size
+      fontSize: "20px", // larger desktop font size
     },
   },
   "& .MuiTabs-flexContainer": {
@@ -88,7 +89,8 @@ const NavigationTabs = styled(Tabs)(({ theme }) => ({
 }));
 
 const BottomCardSection = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(1),
+  // marginTop: theme.spacing(1),
+  paddingTop: theme.spacing(1),
   backgroundColor: "#ffffff",
   padding: theme.spacing(1),
   borderRadius: theme.spacing(1.5),
@@ -147,18 +149,10 @@ const CustomActionButton = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  padding: theme.spacing(1), // smaller padding
-  borderRadius: theme.spacing(0.75), // smaller radius
-  backgroundColor: "#f8f9fa",
-  border: "1px solid #e9ecef",
+  padding: theme.spacing(1),
   fontFamily: FONT_FAMILY.BOLD,
   cursor: "pointer",
   minWidth: 70, // smaller width
-  transition: "all 0.2s ease",
-  "&:hover": {
-    backgroundColor: "#e9ecef",
-    transform: "translateY(-1px)", // smaller transform
-  },
 }));
 
 const ActionIcon = styled(Box)<{ $bgColor: string }>(({ theme, $bgColor }) => ({
@@ -196,6 +190,7 @@ interface IBannerSection {
   bannerImage?: string;
   businessName?: string;
   tableNumber?: string;
+  businessDetails?: BusinessDetails;
   actionButtons?: ActionButtonConfig[];
   onActionClick?: (actionId: string) => void;
   waiterLoading?: boolean;
@@ -208,6 +203,7 @@ const BannerSection: React.FC<IBannerSection> = ({
   bannerImage,
   businessName = "",
   tableNumber = "",
+  businessDetails = null,
   onActionClick,
   waiterLoading = false,
   checkoutLoading = false,
@@ -251,6 +247,97 @@ const BannerSection: React.FC<IBannerSection> = ({
     setSelectedTab(newValue);
   };
 
+  // Helper function to parse and format amenities
+  const getAmenities = (): string => {
+    if (!businessDetails?.amenities) return "";
+    try {
+      const amenitiesData = JSON.parse(businessDetails.amenities);
+      const selected = amenitiesData.selected || [];
+      const custom = amenitiesData.custom || [];
+      const allAmenities = [...selected, ...custom];
+      return allAmenities.join(", ");
+    } catch (error) {
+      console.error("Error parsing amenities:", error);
+      return "";
+    }
+  };
+
+  // Helper function to format time (remove seconds if present)
+  const formatTime = (time: string): string => {
+    if (!time) return "";
+    // If time has seconds (HH:MM:SS), remove them
+    if (time.length === 8 && time.split(':').length === 3) {
+      return time.substring(0, 5); // Returns HH:MM
+    }
+    return time;
+  };
+
+  // Helper function to format business hours
+  const getBusinessHours = (): string => {
+    if (!businessDetails?.businessHours || businessDetails.businessHours.length === 0) return "";
+    return businessDetails.businessHours
+      .map((hour) => {
+        if (hour.isClosed) {
+          return `${hour.day}: Closed`;
+        }
+        // Check if it's 24 hours (00:00 to 23:59 or similar)
+        const is24Hours =
+          (hour.openingTime === "00:00" && hour.closingTime === "23:59") ||
+          (hour.openingTime === "00:00:00" && hour.closingTime === "23:59:59") ||
+          (hour.openingTime === "00:00" && hour.closingTime === "00:00") ||
+          (hour.openingTime === "00:00:00" && hour.closingTime === "00:00:00") ||
+          (hour.openingTime === "Open 24 hours");
+
+        if (is24Hours) {
+          return `${hour.day}: Open 24 hours`;
+        }
+
+        const formattedOpeningTime = formatTime(hour.openingTime);
+        const formattedClosingTime = formatTime(hour.closingTime);
+
+        return `${hour.day}: ${formattedOpeningTime} - ${formattedClosingTime}`;
+      })
+      .join("\n");
+  };
+
+  // Helper function to parse and format parking information
+  const getParkingInfo = (): string => {
+    if (!businessDetails?.parkingInformation) return "";
+    try {
+      const parkingData = JSON.parse(businessDetails.parkingInformation);
+      const parts: string[] = [];
+
+      if (parkingData.type) {
+        parts.push(`${parkingData.type.charAt(0).toUpperCase() + parkingData.type.slice(1)}`);
+      }
+
+      if (parkingData.notes && parkingData.notes.trim() !== "") {
+        parts.push(`${parkingData.notes}`);
+      }
+      return parts.length > 0 ? parts.join(" : ") : "Parking information available";
+    } catch (error) {
+      return "";
+    }
+  };
+
+  // Get content based on selected tab
+  const getTabContent = (): string => {
+    switch (selectedTab) {
+      case 0: // Process
+        return businessDetails?.process || "";
+      case 1: // About
+        return businessDetails?.description || "";
+      case 2: // Amenities
+        return getAmenities();
+      case 3: // Parking
+        return getParkingInfo();
+      case 4: // Timings
+        return getBusinessHours();
+      default:
+        return "";
+    }
+  };
+
   return (
     <MainContainer>
       {/* Banner Image Section */}
@@ -276,6 +363,26 @@ const BannerSection: React.FC<IBannerSection> = ({
           ))}
         </NavigationTabs>
       </RestaurantInfoSection>
+
+      {/* Tab Content Section */}
+      {getTabContent() && (
+        <Box
+          sx={{
+            p: { xs: 1.5, sm: 2 },
+            backgroundColor: COLORS.WHITE,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              lineHeight: 1.6,
+              whiteSpace: "pre-line",
+            }}
+          >
+            {getTabContent()}
+          </Typography>
+        </Box>
+      )}
 
       {/* Bottom Card Section with Table Info and Actions */}
       {tableNumber && (

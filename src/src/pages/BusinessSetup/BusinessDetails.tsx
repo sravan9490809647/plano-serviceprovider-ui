@@ -273,7 +273,7 @@ const BusinessSetupForm: React.FC<{
         window.ReactNativeWebView.postMessage(message);
       } else {
         // Fallback for web testing
-        toast.info(`Setting connection can be done only on mobile app`);
+        // toast.info(`Setting connection can be done only on mobile app`);
       }
     };
     const handleChange = <K extends keyof DayHour>(

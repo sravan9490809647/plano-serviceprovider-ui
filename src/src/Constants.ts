@@ -117,6 +117,7 @@ export const COLORS = {
   ERROR: "#DC2626",
   BLACK: "#000000",
   SEARCH_BOX_BG: "#B8F3EE",
+  WHITE: "#FFFFFF",
 };
 
 export const TEXT_COLORS = {

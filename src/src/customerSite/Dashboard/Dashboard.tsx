@@ -46,7 +46,7 @@ const Dashboard = () => {
     } else {
       StorageService.removeItem('tableId');
     }
-  }, [tableId]);
+  }, [tableId, dispatch]);
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const [opencart, setCartOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -116,7 +116,25 @@ const Dashboard = () => {
       dispatch(fetchAllCategories(businessId));
       dispatch(fetchGetCategoryAndItemsByBusinessId(businessId));
     }
-  }, [businessId]);
+  }, [businessId, dispatch]);
+
+  // Prevent body scroll on mobile
+  useEffect(() => {
+    const isMobile = window.innerWidth < 600;
+    if (isMobile) {
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.height = "100%";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+    };
+  }, []);
 
 
 
@@ -159,7 +177,17 @@ const Dashboard = () => {
   }
   return (
     <>
-      <Box sx={{ width: "100%", maxWidth: "100%", p: 2 }}>
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "100%",
+          height: "100%", // Fixed height on mobile
+          overflow: { xs: "auto", sm: "visible" }, // Scrollable on mobile
+          px: { xs: 1, sm: 2, md: 2 }, // Responsive horizontal padding
+          py: { xs: 1, sm: 2 }, // Responsive vertical padding
+          pb: { xs: 10, sm: 10 }, // Extra bottom padding for cart button
+        }}
+      >
         {isInitialLoading ? (
           <Loader />
         ) : (
@@ -176,6 +204,7 @@ const Dashboard = () => {
                 checkoutLoading={checkoutLoading}
                 sessionTableAmount={tableDetails?.sessionTableAmount || 0}
                 onGetOrderDetails={onGetOrderDetails}
+                businessDetails={businessDetails}
               />
             )}
             {categoriesList.length > 0 && (
@@ -185,7 +214,9 @@ const Dashboard = () => {
                   top: 0,
                   zIndex: 1200,
                   bgcolor: "#fff",
-                  my: 2,
+                  my: { xs: 1, sm: 1.5, md: 2 }, // Responsive margin
+                  mx: { xs: -1, sm: 0 }, // Negative margin on mobile to extend to edges
+                  px: { xs: 1, sm: 0 }, // Add padding back on mobile
                 }}
               >
                 <CategoryList
