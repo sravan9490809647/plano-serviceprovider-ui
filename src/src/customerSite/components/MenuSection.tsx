@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { type CategoryWithItems, type MenuItem } from "../../types";
 import MenuListItems from "../Dashboard/MenuListItems";
+import { TEXT_COLORS } from "../../Constants";
 
 interface MenuSectionProps {
     filteredCategoryWithItems: CategoryWithItems[];
@@ -44,7 +45,7 @@ const MenuSection: React.FC<MenuSectionProps> = ({
                             sx={{
                                 fontSize: { xs: "0.95rem", sm: "1rem", md: "1.1rem" },
                                 fontWeight: 600,
-                                color: "#333",
+                                color: TEXT_COLORS.PRIMARY,
                             }}
                         >
                             {cat.category.title}

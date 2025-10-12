@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 import type { MenuItem, Offer } from "../../types";
 import CustomPaperWrapper from "../../components/CustomPaperWrapper";
@@ -88,112 +88,105 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         mb: 0,
       }}
     >
-      <Grid container spacing={2} alignItems="center">
+      <Box display="flex" alignItems="center" gap={1.5}>
         {/* Image */}
-        <Grid item xs={9} display="flex" alignItems="center">
-          <Box
+        <Box
+          component="img"
+          src={
+            item.thumbnailImage
+              ? `${AWS_BUCKET_BASE_URL}${item.thumbnailImage}`
+              : DEFAULT_IMAGE
+          }
+          alt={item.title}
+          sx={{
+            width: { xs: 80, sm: 100 },
+            height: { xs: 80, sm: 100 },
+            borderRadius: 2,
+            objectFit: "cover",
+            flexShrink: 0,
+          }}
+        />
+
+        {/* Title & Description - Takes remaining space */}
+        <Box sx={{ flex: 1, minWidth: 0, pr: 1 }}>
+          <Typography
+            variant="h6"
+            gutterBottom
             sx={{
-              position: "relative",
-              width: 125,
-              height: 85,
-              marginRight: 1.5,
+              fontFamily: FONT_FAMILY.BOLD,
+              fontSize: "0.875rem",
+              lineHeight: 1.3,
+              mb: 0.5,
+              [theme.breakpoints.up('md')]: {
+                fontSize: "1rem",
+              },
             }}
           >
-            <Box
-              component="img"
-              src={
-                item.thumbnailImage
-                  ? `${AWS_BUCKET_BASE_URL}${item.thumbnailImage}`
-                  : DEFAULT_IMAGE
-              }
-              alt={item.title}
-              sx={{
-                width: 125,
-                height: 85,
-                marginRight: 1.5,
-                borderRadius: 2,
-                objectFit: "cover",
-              }}
-            />
-          </Box>
-
-          {/* Title & Description */}
-          <Box sx={{ pr: 1 }}>
-            <Typography
-              variant="h6"
-              gutterBottom
-              sx={{
-                fontFamily: FONT_FAMILY.BOLD,
-                fontSize: "0.8rem", // mobile font size
-                [theme.breakpoints.up('md')]: {
-                  fontSize: "1rem", // larger desktop font size
-                },
-              }}
-            >
-              {item.title}
-            </Typography>
+            {item.title}
+          </Typography>
+          <Typography
+            variant="caption"
+            fontWeight={400}
+            sx={{
+              ...elipsesText,
+              WebkitLineClamp: 2,
+              fontSize: "0.75rem",
+              lineHeight: 1.4,
+              display: "-webkit-box",
+              [theme.breakpoints.up('md')]: {
+                fontSize: "0.85rem",
+              },
+            }}
+          >
+            {item.description}
+          </Typography>
+          {activeOffer && (
             <Typography
               variant="caption"
-              fontWeight={400}
               sx={{
-                ...elipsesText,
-                WebkitLineClamp: 2,
-                fontSize: "0.7rem", // mobile font size
+                display: "inline-block",
+                backgroundColor: "primary.main",
+                color: "#fff",
+                px: 0.75,
+                py: 0.25,
+                borderRadius: 1,
+                fontSize: "0.625rem",
+                mt: 0.5,
                 [theme.breakpoints.up('md')]: {
-                  fontSize: "0.8rem", // larger desktop font size
+                  fontSize: "0.6875rem",
                 },
               }}
             >
-              {item.description}
+              {getOfferLabel(activeOffer)}
             </Typography>
-            {activeOffer && (
-              <Typography
-                variant="caption"
-                sx={{
-                  backgroundColor: "primary.main",
-                  color: "#fff",
-                  p: 0.5,
-                  borderRadius: 1,
-                  fontSize: "9px", // mobile font size
-                  [theme.breakpoints.up('md')]: {
-                    fontSize: "10px", // larger desktop font size
-                  },
-                }}
-              >
-                {getOfferLabel(activeOffer)}
-              </Typography>
-            )}
-          </Box>
-        </Grid>
+          )}
+        </Box>
 
         {/* Price & Quantity */}
-        <Grid item xs={3}>
-          <Box display="flex" flexDirection="column" alignItems="flex-end">
-            <Typography
-              variant="h5"
-              sx={{
-                fontFamily: FONT_FAMILY.BOLD,
-                fontSize: "0.8rem", // mobile font size
-                [theme.breakpoints.up('md')]: {
-                  fontSize: "1rem", // larger desktop font size
-                },
-              }}
-            >
-              {CURRENCY.symbol}
-              {item.price.toFixed(2)}
-            </Typography>
-            {!isCart && (
-              <Box mt={1}>
-                <QuantityController
-                  onAdd={handleAdd}
-                  onRemove={handleRemove}
-                  quantity={quantity}
-                />
-              </Box>
-            )}
-          </Box>
-        </Grid>
-      </Grid>
+        <Box display="flex" flexDirection="column" alignItems="flex-end" flexShrink={0}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontFamily: FONT_FAMILY.BOLD,
+              fontSize: "0.875rem",
+              mb: 0.5,
+              [theme.breakpoints.up('md')]: {
+                fontSize: "1rem",
+              },
+            }}
+          >
+            {CURRENCY.symbol}
+            {item.price.toFixed(2)}
+          </Typography>
+          {!isCart && (
+            <QuantityController
+              onAdd={handleAdd}
+              onRemove={handleRemove}
+              quantity={quantity}
+            />
+          )}
+        </Box>
+      </Box>
 
       {/* Out of Stock Overlay */}
       {disabled && (
