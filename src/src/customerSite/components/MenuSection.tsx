@@ -31,21 +31,21 @@ const MenuSection: React.FC<MenuSectionProps> = ({
                         item
                         xs={12}
                         key={cat.category.id}
-                        ref={categoryRefs ? (el) => {
-                            categoryRefs.current[cat.category.id] = el as HTMLDivElement | null;
-                        } : undefined}
                         sx={{
-                            scrollMarginTop: { xs: "80px", sm: "90px", md: "100px" },
                             mb: { xs: 2, sm: 2.5, md: 3 }
                         }}
                     >
                         <Typography
                             variant="h5"
                             mb={{ xs: 1, sm: 1.5 }}
+                            ref={categoryRefs ? (el) => {
+                                categoryRefs.current[cat.category.id] = el as HTMLHeadingElement | null;
+                            } : undefined}
                             sx={{
                                 fontSize: { xs: "0.95rem", sm: "1rem", md: "1.1rem" },
                                 fontWeight: 600,
                                 color: TEXT_COLORS.PRIMARY,
+                                scrollMarginTop: { xs: "120px", sm: "130px", md: "140px" },
                             }}
                         >
                             {cat.category.title}
