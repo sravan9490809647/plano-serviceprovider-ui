@@ -138,7 +138,7 @@ const TableInfo = styled(Box)(({ theme }) => ({
 const TableNumber = styled(Typography)(({ theme }) => ({
   fontSize: "0.875rem", // smaller mobile font size
   fontWeight: 700,
-  color: "#333",
+  color: TEXT_COLORS.PRIMARY,
   [theme.breakpoints.up('sm')]: {
     fontSize: "1rem",
   },
@@ -160,7 +160,7 @@ const BillAmount = styled(Box)(({ theme }) => ({
 const BillText = styled(Typography)(({ theme }) => ({
   fontSize: "0.875rem", // smaller mobile font size
   fontWeight: 700,
-  color: "#333",
+  color: TEXT_COLORS.PRIMARY,
   [theme.breakpoints.up('sm')]: {
     fontSize: "1rem",
   },
@@ -447,10 +447,10 @@ const BannerSection: React.FC<IBannerSection> = ({
         <BottomCardSection>
           <TableBillRow>
             <TableInfo>
-              <TableNumber>Table {tableNumber}</TableNumber>
+              <TableNumber variant="h5">Table {tableNumber}</TableNumber>
             </TableInfo>
             <BillAmount onClick={() => onGetOrderDetails && onGetOrderDetails()}>
-              <BillText>
+              <BillText variant="h5">
                 {CURRENCY.symbol}{sessionTableAmount.toFixed(2)}
               </BillText>
               <KeyboardArrowDownIcon sx={{ fontSize: 16, color: "#333" }} />

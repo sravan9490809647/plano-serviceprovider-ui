@@ -160,6 +160,7 @@ const Dashboard = () => {
   return (
     <Box
       sx={{
+        marginTop: 2,
         minHeight: "100vh",
         width: "100%",
         maxWidth: "100vw",
