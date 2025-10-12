@@ -90,7 +90,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
     >
       <Grid container spacing={2} alignItems="center">
         {/* Image */}
-        <Grid item xs={8} sm={8} display="flex" alignItems="center">
+        <Grid item xs={9} display="flex" alignItems="center">
           <Box
             sx={{
               position: "relative",
@@ -118,7 +118,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           </Box>
 
           {/* Title & Description */}
-          <Box>
+          <Box sx={{ pr: 1 }}>
             <Typography
               variant="h6"
               gutterBottom
@@ -167,7 +167,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         </Grid>
 
         {/* Price & Quantity */}
-        <Grid item xs={4} sm={4}>
+        <Grid item xs={3}>
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <Typography
               variant="h5"

@@ -1,9 +1,9 @@
 import { Box, Stack } from "@mui/material";
 import type { MenuCategory } from "../../../types";
 import CustomChip from "../../components/Chip";
-import Input from "../../components/Input";
 import SearchIcon from '@mui/icons-material/Search';
 import { useRef, useState } from "react";
+import Input from "../../../components/Input";
 
 interface ICategoryList {
   categoriesList: MenuCategory[];

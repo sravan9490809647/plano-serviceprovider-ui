@@ -23,6 +23,7 @@ const CustomChip: React.FC<CategoryChipProps> = ({
       variant={selected ? "filled" : "outlined"}
       sx={{
         borderRadius: 2,
+        border: "none",
         p: 2,
         fontSize: "14px",
         fontFamily: FONT_FAMILY.BOLD,

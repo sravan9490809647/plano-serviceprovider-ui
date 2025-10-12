@@ -116,25 +116,7 @@ const Dashboard = () => {
       dispatch(fetchAllCategories(businessId));
       dispatch(fetchGetCategoryAndItemsByBusinessId(businessId));
     }
-  }, [businessId, dispatch]);
-
-  // Prevent body scroll on mobile
-  useEffect(() => {
-    const isMobile = window.innerWidth < 600;
-    if (isMobile) {
-      document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed";
-      document.body.style.width = "100%";
-      document.body.style.height = "100%";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
-      document.body.style.height = "";
-    };
-  }, []);
+  }, [businessId]);
 
 
 
@@ -176,23 +158,22 @@ const Dashboard = () => {
     };
   }
   return (
-    <>
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: "100%",
-          height: "100%", // Fixed height on mobile
-          overflow: { xs: "auto", sm: "visible" }, // Scrollable on mobile
-          px: { xs: 1, sm: 2, md: 2 }, // Responsive horizontal padding
-          py: { xs: 1, sm: 2 }, // Responsive vertical padding
-          pb: { xs: 10, sm: 10 }, // Extra bottom padding for cart button
-        }}
-      >
-        {isInitialLoading ? (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100%",
+        maxWidth: "100vw",
+        overflowX: "clip",
+      }}
+    >
+      {isInitialLoading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
           <Loader />
-        ) : (
-          <>
-            {businessDetails && (
+        </Box>
+      ) : (
+        <Box>
+          {businessDetails && (
+            <Box sx={{ px: { xs: 2, sm: 2 } }}>
               <BannerSection
                 bannerImage={
                   JSON.parse(businessDetails.brandAssets)?.banner || ""
@@ -206,27 +187,32 @@ const Dashboard = () => {
                 onGetOrderDetails={onGetOrderDetails}
                 businessDetails={businessDetails}
               />
-            )}
-            {categoriesList.length > 0 && (
-              <Box
-                sx={{
-                  position: "sticky",
-                  top: 0,
-                  zIndex: 1200,
-                  bgcolor: "#fff",
-                  my: { xs: 1, sm: 1.5, md: 2 }, // Responsive margin
-                  mx: { xs: -1, sm: 0 }, // Negative margin on mobile to extend to edges
-                  px: { xs: 1, sm: 0 }, // Add padding back on mobile
-                }}
-              >
-                <CategoryList
-                  categoriesList={categoriesList}
-                  selectedCategory={selectedCategory}
-                  onSelectCategory={onSelectCategory}
-                  onSearch={handleSearch}
-                />
-              </Box>
-            )}
+            </Box>
+          )}
+          {categoriesList.length > 0 && (
+            <Box
+              sx={{
+                position: "sticky",
+                WebkitPosition: "sticky",
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 1200,
+                bgcolor: "#fff",
+                px: { xs: 2, sm: 2 },
+                py: { xs: 1.5, sm: 2 },
+                width: "100%",
+              }}
+            >
+              <CategoryList
+                categoriesList={categoriesList}
+                selectedCategory={selectedCategory}
+                onSelectCategory={onSelectCategory}
+                onSearch={handleSearch}
+              />
+            </Box>
+          )}
+          <Box sx={{ px: { xs: 2, sm: 2 }, pb: { xs: 10, sm: 10 } }}>
             <MenuSection
               filteredCategoryWithItems={filteredCategoryWithItems}
               searchTerm={searchTerm}
@@ -235,55 +221,55 @@ const Dashboard = () => {
               onDeleteItem={onDeleteItem}
               categoryRefs={categoryRefs}
             />
-          </>
-        )}
+          </Box>
+        </Box>
+      )}
 
-        {itemDetails && itemDetails.id && (
-          <MenuItemDetails
-            itemDetails={itemDetails}
-            variations={selectedVariation}
-            ingredients={removedIngredients}
-            options={selectedOptions}
-            onCloseDetails={onCloseDetails}
-            onAddToCart={({
-              title,
-              quantity,
-              thumbnailImage,
-              variation,
-              optionGroups,
-              removedIngredients,
-              allergies,
-              price,
-              totalPrice,
-            }) => {
-              dispatch(
-                addToCart({
-                  title,
-                  itemId: itemDetails.id,
-                  quantity,
-                  thumbnailImage,
-                  variation,
-                  allergies,
-                  optionGroups,
-                  removedIngredients,
-                  price,
-                  totalPrice,
-                })
-              );
-              onCloseDetails();
-            }}
-          />
-        )}
+      {itemDetails && itemDetails.id && (
+        <MenuItemDetails
+          itemDetails={itemDetails}
+          variations={selectedVariation}
+          ingredients={removedIngredients}
+          options={selectedOptions}
+          onCloseDetails={onCloseDetails}
+          onAddToCart={({
+            title,
+            quantity,
+            thumbnailImage,
+            variation,
+            optionGroups,
+            removedIngredients,
+            allergies,
+            price,
+            totalPrice,
+          }) => {
+            dispatch(
+              addToCart({
+                title,
+                itemId: itemDetails.id,
+                quantity,
+                thumbnailImage,
+                variation,
+                allergies,
+                optionGroups,
+                removedIngredients,
+                price,
+                totalPrice,
+              })
+            );
+            onCloseDetails();
+          }}
+        />
+      )}
 
-        {opencart && (
-          <Cart
-            cartItems={cartItems}
-            setCartOpen={setCartOpen}
-            opencart={opencart}
-            businessId={businessId || ""}
-          />
-        )}
-      </Box>
+      {opencart && (
+        <Cart
+          cartItems={cartItems}
+          setCartOpen={setCartOpen}
+          opencart={opencart}
+          businessId={businessId || ""}
+        />
+      )}
 
       {/* Cart Button - Fixed Bottom Position */}
       <CartButton
@@ -317,7 +303,7 @@ const Dashboard = () => {
       {reservedTableOrders.length > 0 && (
         <TableOrderDetails orderDetails={reservedTableOrders} onClose={() => setReservedTableOrders([])} />
       )}
-    </>
+    </Box>
   );
 };
 

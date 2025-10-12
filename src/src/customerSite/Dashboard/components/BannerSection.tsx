@@ -1,5 +1,5 @@
 import { Box, styled, Typography, Tab, Tabs } from "@mui/material";
-import { AWS_BUCKET_BASE_URL, COLORS, CURRENCY, FONT_FAMILY } from "../../../Constants";
+import { AWS_BUCKET_BASE_URL, COLORS, CURRENCY, FONT_FAMILY, TEXT_COLORS } from "../../../Constants";
 import PersonIcon from '@mui/icons-material/Person';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import MessageIcon from '@mui/icons-material/Message';
@@ -7,101 +7,126 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from 'react';
 import type { BusinessDetails } from "../../../types";
 
-// Styled Components
-const MainContainer = styled(Box)(({ theme }) => ({
-  width: "100%",
-  borderRadius: theme.spacing(1),
-  overflow: "hidden",
-  backgroundColor: "#f5f5f5",
-}));
-
 const BannerImageSection = styled(Box)(({ theme }) => ({
-  height: theme.spacing(20), // 160px - smaller for mobile
+  height: theme.spacing(15), // 120px - even smaller for mobile
   backgroundSize: "cover",
   backgroundPosition: "center",
   position: "relative",
   borderRadius: `${theme.spacing(1)} ${theme.spacing(1)} 0 0`,
+  [theme.breakpoints.up('sm')]: {
+    height: theme.spacing(20),
+  },
   [theme.breakpoints.up('md')]: {
     height: theme.spacing(25),
   },
 }));
 
-const RestaurantInfoSection = styled(Box)(() => ({
+const TabsWrapper = styled(Box)(() => ({
+  width: "100%",
+  maxWidth: "100vw",
+  overflow: "hidden",
   backgroundColor: "#ffffff",
-  padding: 0, // remove padding from container
-}));
-
-const RestaurantName = styled(Typography)(({ theme }) => ({
-  color: "#4CAF50",
-  fontWeight: 700,
-  marginBottom: theme.spacing(0.5),
-  textAlign: "left",
-  fontSize: "1.2rem", // mobile font size
-  padding: theme.spacing(1), // add padding only to restaurant name
-  [theme.breakpoints.up('md')]: {
-    fontSize: "1.5rem", // larger desktop font size
-  },
+  position: "relative",
+  marginBottom: "10px",
 }));
 
 const NavigationTabs = styled(Tabs)(({ theme }) => ({
-  minHeight: 32, // smaller height
-  backgroundColor: "#ffffff", // white background
-  padding: 0, // remove default padding
-  margin: 0, // remove default margin
+  minHeight: 40,
+  backgroundColor: "#ffffff",
+  // borderBottom: "1px solid #e0e0e0",
+  padding: 0,
+  margin: 0,
+  width: "100%",
+  maxWidth: "100%",
+  display: "flex",
   "& .MuiTabs-indicator": {
-    backgroundColor: "#333",
-    height: 2, // thinner indicator
+    backgroundColor: "#4CAF50",
+    height: 2,
   },
   "& .MuiTab-root": {
     textTransform: "none",
-    minHeight: 32, // smaller height
-    fontSize: "16px", // mobile font size
-    fontWeight: 600,
-    color: "#999",
-    padding: theme.spacing(0.5, 0.75), // reduced horizontal padding
-    margin: 0, // remove any default margins
+    minHeight: 40,
+    fontSize: "14px",
+    fontWeight: 500,
+    color: "#666",
+    padding: theme.spacing(1, 1.5),
+    margin: 0,
+    minWidth: "auto",
+    flex: "0 0 auto",
+    whiteSpace: "nowrap",
+    transition: "color 0.2s ease-in-out",
+    "&:hover": {
+      color: "#4CAF50",
+    },
     "&.Mui-selected": {
-      color: "#333",
+      color: "#4CAF50",
+      fontWeight: 600,
+    },
+    "&:focus": {
+      outline: "none",
+    },
+    "&.Mui-focusVisible": {
+      backgroundColor: "transparent",
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: "15px",
+      minHeight: 44,
+      padding: theme.spacing(1, 2),
     },
     [theme.breakpoints.up('md')]: {
-      fontSize: "20px", // larger desktop font size
+      fontSize: "16px",
+      minHeight: 48,
+      padding: theme.spacing(1, 2.5),
     },
   },
   "& .MuiTabs-flexContainer": {
-    gap: 0, // remove gap between tabs
-    padding: 0, // remove container padding
-    margin: 0, // remove container margin
-    transform: "translateX(0) !important", // force reset transform
+    gap: theme.spacing(0.5),
+    display: "flex",
+    flexWrap: "nowrap",
   },
   "& .MuiTabs-scroller": {
-    padding: 0, // remove scroller padding
-    margin: 0, // remove scroller margin
-    transform: "translateX(0) !important", // force reset transform
+    overflowY: "hidden !important",
+    overflowX: "auto !important",
+    scrollbarWidth: "none",
+    display: "flex",
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
   },
   "& .MuiTabs-scrollButtons": {
-    display: "none", // hide scroll buttons if they're causing issues
-  },
-  "& .MuiTabs-scrollableX": {
-    padding: 0, // remove scrollable padding
-    margin: 0, // remove scrollable margin
-    transform: "translateX(0) !important", // force reset transform
+    width: "40px",
+    flex: "0 0 auto",
+    color: "#666",
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+    "&.Mui-disabled": {
+      opacity: 0.3,
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: "32px",
+    },
   },
 }));
 
 const BottomCardSection = styled(Box)(({ theme }) => ({
-  // marginTop: theme.spacing(1),
-  paddingTop: theme.spacing(1),
   backgroundColor: "#ffffff",
-  padding: theme.spacing(1),
-  borderRadius: theme.spacing(1.5),
+  padding: theme.spacing(1.5, 2),
   border: "1px solid #e0e0e0",
+  borderRadius: "10px",
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(2, 2.5),
+  },
 }));
 
 const TableBillRow = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  marginBottom: theme.spacing(1.5), // smaller margin
+  marginBottom: theme.spacing(0.75), // even smaller margin on mobile
+  [theme.breakpoints.up('sm')]: {
+    marginBottom: theme.spacing(1.5),
+  },
 }));
 
 const TableInfo = styled(Box)(({ theme }) => ({
@@ -111,9 +136,12 @@ const TableInfo = styled(Box)(({ theme }) => ({
 }));
 
 const TableNumber = styled(Typography)(({ theme }) => ({
-  fontSize: "1rem", // mobile font size
+  fontSize: "0.875rem", // smaller mobile font size
   fontWeight: 700,
   color: "#333",
+  [theme.breakpoints.up('sm')]: {
+    fontSize: "1rem",
+  },
   [theme.breakpoints.up('md')]: {
     fontSize: "1.3rem", // larger desktop font size
   },
@@ -130,9 +158,12 @@ const BillAmount = styled(Box)(({ theme }) => ({
 }));
 
 const BillText = styled(Typography)(({ theme }) => ({
-  fontSize: "1rem", // mobile font size
+  fontSize: "0.875rem", // smaller mobile font size
   fontWeight: 700,
   color: "#333",
+  [theme.breakpoints.up('sm')]: {
+    fontSize: "1rem",
+  },
   [theme.breakpoints.up('md')]: {
     fontSize: "1.3rem", // larger desktop font size
   },
@@ -141,37 +172,53 @@ const BillText = styled(Typography)(({ theme }) => ({
 const ActionButtonsRow = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  gap: theme.spacing(1.5), // smaller gap
+  gap: theme.spacing(0.75), // even smaller gap on mobile
   justifyContent: "center",
+  [theme.breakpoints.up('sm')]: {
+    gap: theme.spacing(1.5),
+  },
 }));
 
 const CustomActionButton = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  padding: theme.spacing(1),
+  padding: theme.spacing(0.5), // smaller padding on mobile
   fontFamily: FONT_FAMILY.BOLD,
   cursor: "pointer",
-  minWidth: 70, // smaller width
+  minWidth: 60, // smaller width on mobile
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(1),
+    minWidth: 70,
+  },
 }));
 
 const ActionIcon = styled(Box)<{ $bgColor: string }>(({ theme, $bgColor }) => ({
-  width: 40, // smaller icon container
-  height: 40,
-  borderRadius: theme.spacing(0.75), // smaller radius
+  width: 32, // smaller icon container on mobile
+  height: 32,
+  borderRadius: theme.spacing(0.6), // smaller radius
   backgroundColor: $bgColor,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   marginBottom: theme.spacing(0.25), // smaller margin
   boxShadow: "0 1px 3px rgba(0,0,0,0.1)", // smaller shadow
+  [theme.breakpoints.up('sm')]: {
+    width: 40,
+    height: 40,
+    borderRadius: theme.spacing(0.75),
+  },
 }));
 
 const ActionLabel = styled(Typography)(({ theme }) => ({
-  fontSize: "0.7rem", // mobile font size
+  fontSize: "0.625rem", // smaller mobile font size
   fontWeight: 600,
   color: "#333",
   textAlign: "center",
+  lineHeight: 1.2,
+  [theme.breakpoints.up('sm')]: {
+    fontSize: "0.7rem",
+  },
   [theme.breakpoints.up('md')]: {
     fontSize: "0.9rem", // larger desktop font size
   },
@@ -339,44 +386,55 @@ const BannerSection: React.FC<IBannerSection> = ({
   };
 
   return (
-    <MainContainer>
+    <Box>
       {/* Banner Image Section */}
       <BannerImageSection
         sx={{
           backgroundImage: `url(${AWS_BUCKET_BASE_URL}${bannerImage})`,
         }}
       />
-      <RestaurantInfoSection>
-        <RestaurantName variant="h6">
-          {businessName}
-        </RestaurantName>
+      <Typography
+        variant="h3"
+        sx={{
+          color: TEXT_COLORS.PRIMARY,
+          fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+          fontWeight: 700,
+          padding: { xs: theme => theme.spacing(1.5, 2), sm: theme => theme.spacing(2, 2.5) },
+          margin: 0,
+        }}
+      >
+        {businessName}
+      </Typography>
 
+      <TabsWrapper>
         <NavigationTabs
           value={selectedTab}
           onChange={handleTabChange}
           variant="scrollable"
           scrollButtons="auto"
-          allowScrollButtonsMobile
+        // allowScrollButtonsMobile
         >
           {tabs.map((tab, index) => (
             <Tab key={index} label={tab} />
           ))}
         </NavigationTabs>
-      </RestaurantInfoSection>
+      </TabsWrapper>
 
       {/* Tab Content Section */}
       {getTabContent() && (
         <Box
           sx={{
-            p: { xs: 1.5, sm: 2 },
+            p: 1,
             backgroundColor: COLORS.WHITE,
           }}
         >
           <Typography
             variant="body1"
             sx={{
-              lineHeight: 1.6,
+              fontSize: { xs: "0.875rem", sm: "0.9375rem", md: "1rem" },
+              lineHeight: 1.7,
               whiteSpace: "pre-line",
+              color: "#555",
             }}
           >
             {getTabContent()}
@@ -412,7 +470,7 @@ const BannerSection: React.FC<IBannerSection> = ({
                     <button.icon
                       sx={{
                         color: "#333",
-                        fontSize: 20, // smaller icon
+                        fontSize: { xs: 16, sm: 18, md: 20 }, // responsive icon size
                         opacity: isLoading ? 0.5 : 1
                       }}
                     />
@@ -426,7 +484,7 @@ const BannerSection: React.FC<IBannerSection> = ({
           </ActionButtonsRow>
         </BottomCardSection>
       )}
-    </MainContainer>
+    </Box>
   );
 };
 
