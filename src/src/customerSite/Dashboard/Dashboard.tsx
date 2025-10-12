@@ -46,7 +46,7 @@ const Dashboard = () => {
     } else {
       StorageService.removeItem('tableId');
     }
-  }, [tableId]);
+  }, [tableId, dispatch]);
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
   const [opencart, setCartOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -158,13 +158,23 @@ const Dashboard = () => {
     };
   }
   return (
-    <>
-      <Box sx={{ width: "100%", maxWidth: "100%", p: 2 }}>
-        {isInitialLoading ? (
+    <Box
+      sx={{
+        marginTop: 2,
+        minHeight: "100vh",
+        width: "100%",
+        maxWidth: "100vw",
+        overflowX: "clip",
+      }}
+    >
+      {isInitialLoading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
           <Loader />
-        ) : (
-          <>
-            {businessDetails && (
+        </Box>
+      ) : (
+        <Box>
+          {businessDetails && (
+            <Box sx={{ px: { xs: 2, sm: 2 } }}>
               <BannerSection
                 bannerImage={
                   JSON.parse(businessDetails.brandAssets)?.banner || ""
@@ -176,26 +186,34 @@ const Dashboard = () => {
                 checkoutLoading={checkoutLoading}
                 sessionTableAmount={tableDetails?.sessionTableAmount || 0}
                 onGetOrderDetails={onGetOrderDetails}
+                businessDetails={businessDetails}
               />
-            )}
-            {categoriesList.length > 0 && (
-              <Box
-                sx={{
-                  position: "sticky",
-                  top: 0,
-                  zIndex: 1200,
-                  bgcolor: "#fff",
-                  my: 2,
-                }}
-              >
-                <CategoryList
-                  categoriesList={categoriesList}
-                  selectedCategory={selectedCategory}
-                  onSelectCategory={onSelectCategory}
-                  onSearch={handleSearch}
-                />
-              </Box>
-            )}
+            </Box>
+          )}
+          {categoriesList.length > 0 && (
+            <Box
+              sx={{
+                position: "sticky",
+                WebkitPosition: "sticky",
+                top: 0,
+                left: 0,
+                right: 0,
+                zIndex: 1200,
+                bgcolor: "#fff",
+                px: { xs: 2, sm: 2 },
+                py: { xs: 1.5, sm: 2 },
+                width: "100%",
+              }}
+            >
+              <CategoryList
+                categoriesList={categoriesList}
+                selectedCategory={selectedCategory}
+                onSelectCategory={onSelectCategory}
+                onSearch={handleSearch}
+              />
+            </Box>
+          )}
+          <Box sx={{ px: { xs: 2, sm: 2 }, pb: { xs: 10, sm: 10 } }}>
             <MenuSection
               filteredCategoryWithItems={filteredCategoryWithItems}
               searchTerm={searchTerm}
@@ -204,55 +222,55 @@ const Dashboard = () => {
               onDeleteItem={onDeleteItem}
               categoryRefs={categoryRefs}
             />
-          </>
-        )}
+          </Box>
+        </Box>
+      )}
 
-        {itemDetails && itemDetails.id && (
-          <MenuItemDetails
-            itemDetails={itemDetails}
-            variations={selectedVariation}
-            ingredients={removedIngredients}
-            options={selectedOptions}
-            onCloseDetails={onCloseDetails}
-            onAddToCart={({
-              title,
-              quantity,
-              thumbnailImage,
-              variation,
-              optionGroups,
-              removedIngredients,
-              allergies,
-              price,
-              totalPrice,
-            }) => {
-              dispatch(
-                addToCart({
-                  title,
-                  itemId: itemDetails.id,
-                  quantity,
-                  thumbnailImage,
-                  variation,
-                  allergies,
-                  optionGroups,
-                  removedIngredients,
-                  price,
-                  totalPrice,
-                })
-              );
-              onCloseDetails();
-            }}
-          />
-        )}
+      {itemDetails && itemDetails.id && (
+        <MenuItemDetails
+          itemDetails={itemDetails}
+          variations={selectedVariation}
+          ingredients={removedIngredients}
+          options={selectedOptions}
+          onCloseDetails={onCloseDetails}
+          onAddToCart={({
+            title,
+            quantity,
+            thumbnailImage,
+            variation,
+            optionGroups,
+            removedIngredients,
+            allergies,
+            price,
+            totalPrice,
+          }) => {
+            dispatch(
+              addToCart({
+                title,
+                itemId: itemDetails.id,
+                quantity,
+                thumbnailImage,
+                variation,
+                allergies,
+                optionGroups,
+                removedIngredients,
+                price,
+                totalPrice,
+              })
+            );
+            onCloseDetails();
+          }}
+        />
+      )}
 
-        {opencart && (
-          <Cart
-            cartItems={cartItems}
-            setCartOpen={setCartOpen}
-            opencart={opencart}
-            businessId={businessId || ""}
-          />
-        )}
-      </Box>
+      {opencart && (
+        <Cart
+          cartItems={cartItems}
+          setCartOpen={setCartOpen}
+          opencart={opencart}
+          businessId={businessId || ""}
+        />
+      )}
 
       {/* Cart Button - Fixed Bottom Position */}
       <CartButton
@@ -286,7 +304,7 @@ const Dashboard = () => {
       {reservedTableOrders.length > 0 && (
         <TableOrderDetails orderDetails={reservedTableOrders} onClose={() => setReservedTableOrders([])} />
       )}
-    </>
+    </Box>
   );
 };
 

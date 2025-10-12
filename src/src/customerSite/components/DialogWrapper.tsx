@@ -42,6 +42,7 @@ const DialogWrapper: React.FC<DialogWrapperProps> = ({
       PaperProps={{
         sx: {
           py: 2,
+          height: "95%",
           borderRadius: 3,
         },
       }}

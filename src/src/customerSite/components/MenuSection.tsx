@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { type CategoryWithItems, type MenuItem } from "../../types";
 import MenuListItems from "../Dashboard/MenuListItems";
+import { TEXT_COLORS } from "../../Constants";
 
 interface MenuSectionProps {
     filteredCategoryWithItems: CategoryWithItems[];
@@ -24,25 +25,27 @@ const MenuSection: React.FC<MenuSectionProps> = ({
 
     if (filteredCategoryWithItems.length > 0) {
         return (
-            <Box>
+            <Grid container spacing={0}>
                 {filteredCategoryWithItems.map((cat) => (
-                    <Box
+                    <Grid
+                        item
+                        xs={12}
                         key={cat.category.id}
-                        mb={1}
-                        ref={categoryRefs ? (el) => {
-                            categoryRefs.current[cat.category.id] = el as HTMLDivElement | null;
-                        } : undefined}
-                        sx={{ scrollMarginTop: "90px" }}
+                        sx={{
+                            mb: { xs: 2, sm: 2.5, md: 3 }
+                        }}
                     >
                         <Typography
                             variant="h5"
-                            mb={1}
+                            mb={{ xs: 1, sm: 1.5 }}
+                            ref={categoryRefs ? (el) => {
+                                categoryRefs.current[cat.category.id] = el as HTMLHeadingElement | null;
+                            } : undefined}
                             sx={{
-                                fontSize: "1rem", // mobile font size
+                                fontSize: { xs: "0.95rem", sm: "1rem", md: "1.1rem" },
                                 fontWeight: 600,
-                                [theme.breakpoints.up('md')]: {
-                                    fontSize: "1.1rem", // larger desktop font size
-                                },
+                                color: TEXT_COLORS.PRIMARY,
+                                scrollMarginTop: { xs: "120px", sm: "130px", md: "140px" },
                             }}
                         >
                             {cat.category.title}
@@ -59,18 +62,15 @@ const MenuSection: React.FC<MenuSectionProps> = ({
                                 variant="body2"
                                 color="text.secondary"
                                 sx={{
-                                    fontSize: "0.8rem", // mobile font size
-                                    [theme.breakpoints.up('md')]: {
-                                        fontSize: "0.9rem", // larger desktop font size
-                                    },
+                                    fontSize: { xs: "0.8rem", sm: "0.85rem", md: "0.9rem" },
                                 }}
                             >
                                 No items available in this category.
                             </Typography>
                         )}
-                    </Box>
+                    </Grid>
                 ))}
-            </Box>
+            </Grid>
         );
     }
 

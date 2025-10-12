@@ -53,22 +53,23 @@ const DialogWrapper: React.FC<DialogWrapperProps> = ({
           alignItems: "center",
           px: 3,
           py: 1,
+          mb: 1,
           textAlign: "center",
         }}
       >
-        <Typography variant="h5" fontFamily={FONT_FAMILY.BOLD}>
+        <Typography variant="h4" fontFamily={FONT_FAMILY.BOLD}>
           {title}
         </Typography>
         <IconButton
           onClick={onClose}
-          size="small"
+          size="large"
           sx={{
             position: "absolute",
             right: theme.spacing(1),
             top: theme.spacing(1),
           }}
         >
-          <CloseIcon />
+          <CloseIcon fontSize="medium" />
         </IconButton>
       </DialogTitle>
 
