@@ -1,4 +1,5 @@
 import axios, { isAxiosError } from "axios";
+import { toast } from "react-toastify";
 import { BASE_URL } from "../Constants";
 
 // Create an Axios instance
@@ -25,6 +26,27 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+// ✅ Response interceptor to handle 401 errors
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Show logout message
+      toast.error("Session expired. Please login again.");
+
+      // Clear all storage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Redirect to login page
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
+    }
+    return Promise.reject(error);
+  }
 );
 
 // ✅ Generic request handler

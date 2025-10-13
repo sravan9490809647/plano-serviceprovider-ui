@@ -23,7 +23,7 @@ export const useBackgroundPolling = (enabled: boolean) => {
                     `${ENDPOINTS.ORDERS.GET_ORDERED_ORDERS_COUNT}${businessId}`
                 );
                 // Update ordered count if successful
-                if (response && response.count) {
+                if (response && response.count !== undefined) {
                     dispatch(setOrderedCount(response.count));
                 }
             } catch (error) {
