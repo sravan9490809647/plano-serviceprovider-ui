@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {(!collapsed || isMobile) && (
               <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
                 <Typography variant="h5">{item.label}</Typography>
-                {item.count !== undefined && (
+                {item.count !== undefined && item.count > 0 && (
                   <Box
                     sx={{
                       backgroundColor: theme.palette.primary.main,

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Box, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../redux/store";
-import { fetchTables } from "../../redux/reducers/TablesReducer";
+import { fetchTables, setUnseenMessagesCount } from "../../redux/reducers/TablesReducer";
 import Header from "../../components/Header";
 import Loader from "../../components/Loader";
 import TablesOverview from "./components/TablesOverview";
@@ -50,15 +50,21 @@ const Tables: React.FC = () => {
         dispatch(onFetchBusinessDetails(businessId));
         // Fetch tables immediately
         dispatch(fetchTables(businessId));
-
+        fetchUnseenMessagesCount();
         // Set up interval polling for tables
         const intervalId = window.setInterval(() => {
             dispatch(fetchTables(businessId));
+            fetchUnseenMessagesCount();
         }, POLLING_INTERVALS.ORDERS);
 
         return () => {
             clearInterval(intervalId);
         };
+    }, [businessId, dispatch]);
+
+    const fetchUnseenMessagesCount = useCallback(async () => {
+        const response = await ApiService.request('GET', `${ENDPOINTS.TABLES.GET_TABLE_MESSAGES_UNSEEN_COUNT}${businessId}`)
+        dispatch(setUnseenMessagesCount(response.unseenMessagesCount));
     }, [businessId, dispatch]);
 
     const handleTerminateSession = useCallback(async () => {
