@@ -76,7 +76,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   return (
     <CustomPaperWrapper
       sx={{
-        px: 1,
+        px: 0,
         border: "none !important",
         borderWidth: 0,
         borderStyle: "none",
@@ -86,6 +86,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         pointerEvents: disabled ? "none" : "auto",
         position: "relative",
         mb: 0,
+        pb: 0,
       }}
     >
       <Box display="flex" alignItems="center" gap={1.5}>
@@ -102,7 +103,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
             width: { xs: 120, sm: 120 },
             height: { xs: 80, sm: 100 },
             borderRadius: 3,
-            objectFit: "contain",
+            objectFit: "cover",
             flexShrink: 0,
           }}
         />

@@ -122,6 +122,7 @@ export const COLORS = {
 
 export const TEXT_COLORS = {
   PRIMARY: "#16ae9f",
+  BLACK: "#000000",
 };
 
 export const BUTTON_COLORS = {

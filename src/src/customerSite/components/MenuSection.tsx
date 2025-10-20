@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Divider, Grid, Typography, useTheme } from "@mui/material";
 import { type CategoryWithItems, type MenuItem } from "../../types";
 import MenuListItems from "../Dashboard/MenuListItems";
-import { TEXT_COLORS } from "../../Constants";
+import { FONT_SIZE, TEXT_COLORS } from "../../Constants";
 
 interface MenuSectionProps {
     filteredCategoryWithItems: CategoryWithItems[];
@@ -35,21 +35,36 @@ const MenuSection: React.FC<MenuSectionProps> = ({
                             mb: { xs: 2, sm: 2.5, md: 3 }
                         }}
                     >
-                        <Typography
-                            variant="h5"
+                        <Box
+                            display="flex"
+                            alignItems="center"
                             mb={{ xs: 1, sm: 1.5 }}
                             ref={categoryRefs ? (el) => {
                                 categoryRefs.current[cat.category.id] = el as HTMLHeadingElement | null;
                             } : undefined}
                             sx={{
-                                fontSize: { xs: "0.95rem", sm: "1rem", md: "1.1rem" },
-                                fontWeight: 600,
-                                color: TEXT_COLORS.PRIMARY,
                                 scrollMarginTop: { xs: "120px", sm: "130px", md: "140px" },
                             }}
                         >
-                            {cat.category.title}
-                        </Typography>
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    fontSize: FONT_SIZE.XLARGE,
+                                    fontWeight: 900,
+                                    color: TEXT_COLORS.PRIMARY,
+                                    mr: 2,
+                                    flexShrink: 0,
+                                }}
+                            >
+                                {cat.category.title}
+                            </Typography>
+                            <Divider
+                                sx={{
+                                    flex: 1,
+                                    height: "1px",
+                                }}
+                            />
+                        </Box>
                         {cat.items.length > 0 ? (
                             <MenuListItems
                                 items={cat.items}
