@@ -1,18 +1,19 @@
-import { Box, styled, Typography, Tab, Tabs } from "@mui/material";
+import { Box, styled, Typography, Tab, Tabs, Button } from "@mui/material";
 import { AWS_BUCKET_BASE_URL, COLORS, CURRENCY, FONT_FAMILY, TEXT_COLORS } from "../../../Constants";
-import PersonIcon from '@mui/icons-material/Person';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import MessageIcon from '@mui/icons-material/Message';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useState } from 'react';
 import type { BusinessDetails } from "../../../types";
-
+import waiterIcon from "./../../../../assets/images/waiter_icon.png";
+import checkoutIcon from "../../../../assets/images/checkout_icon.png";
+import messageIcon from "../../../../assets/images/message_icon.png";
 const BannerImageSection = styled(Box)(({ theme }) => ({
   height: theme.spacing(15), // 120px - even smaller for mobile
   backgroundSize: "cover",
   backgroundPosition: "center",
   position: "relative",
-  borderRadius: `${theme.spacing(1)} ${theme.spacing(1)} 0 0`,
+  borderRadius: `${theme.spacing(1)}`,
   [theme.breakpoints.up('sm')]: {
     height: theme.spacing(20),
   },
@@ -40,7 +41,7 @@ const NavigationTabs = styled(Tabs)(({ theme }) => ({
   maxWidth: "100%",
   display: "flex",
   "& .MuiTabs-indicator": {
-    backgroundColor: "#4CAF50",
+    backgroundColor: COLORS.BLACK,
     height: 2,
   },
   "& .MuiTab-root": {
@@ -56,10 +57,10 @@ const NavigationTabs = styled(Tabs)(({ theme }) => ({
     whiteSpace: "nowrap",
     transition: "color 0.2s ease-in-out",
     "&:hover": {
-      color: "#4CAF50",
+      color: COLORS.BLACK,
     },
     "&.Mui-selected": {
-      color: "#4CAF50",
+      color: COLORS.BLACK,
       fontWeight: 600,
     },
     "&:focus": {
@@ -138,7 +139,7 @@ const TableInfo = styled(Box)(({ theme }) => ({
 const TableNumber = styled(Typography)(({ theme }) => ({
   fontSize: "0.875rem", // smaller mobile font size
   fontWeight: 700,
-  color: TEXT_COLORS.PRIMARY,
+  color: TEXT_COLORS.BLACK,
   [theme.breakpoints.up('sm')]: {
     fontSize: "1rem",
   },
@@ -194,43 +195,33 @@ const CustomActionButton = styled(Box)(({ theme }) => ({
 }));
 
 const ActionIcon = styled(Box, {
-  shouldForwardProp: (prop) => prop !== '$bgColor',
-})<{ $bgColor: string }>(({ theme, $bgColor }) => ({
-  width: 32, // smaller icon container on mobile
-  height: 32,
-  borderRadius: theme.spacing(0.6), // smaller radius
-  backgroundColor: $bgColor,
+})(({ theme }) => ({
+  width: 45,
+  height: 45,
+  borderRadius: theme.spacing(0.5), // smaller radius
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginBottom: theme.spacing(0.25), // smaller margin
-  boxShadow: "0 1px 3px rgba(0,0,0,0.1)", // smaller shadow
-  [theme.breakpoints.up('sm')]: {
-    width: 40,
-    height: 40,
-    borderRadius: theme.spacing(0.75),
-  },
+  marginBottom: "10px", // smaller margin
+  boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
 }));
 
 const ActionLabel = styled(Typography)(({ theme }) => ({
-  fontSize: "0.625rem", // smaller mobile font size
-  fontWeight: 600,
+  fontSize: "0.8rem", // smaller mobile font size
+  fontWeight: 700,
   color: "#333",
   textAlign: "center",
   lineHeight: 1.2,
   [theme.breakpoints.up('sm')]: {
-    fontSize: "0.7rem",
-  },
-  [theme.breakpoints.up('md')]: {
-    fontSize: "0.9rem", // larger desktop font size
-  },
+    fontSize: "1rem",
+  }
 }));
 
 // Action button configuration
 interface ActionButtonConfig {
   id: string;
   label: string;
-  icon: React.ComponentType<any>;
+  icon: string;
   bgColor: string;
   onClick?: () => void;
 }
@@ -260,25 +251,26 @@ const BannerSection: React.FC<IBannerSection> = ({
   onGetOrderDetails
 }) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Default action buttons if none provided
   const defaultActionButtons: ActionButtonConfig[] = [
     {
       id: "waiter",
       label: "Request Waiter",
-      icon: PersonIcon,
+      icon: waiterIcon,
       bgColor: "#e8f5e8",
     },
     {
       id: "checkout",
       label: "Request Checkout",
-      icon: CreditCardIcon,
+      icon: checkoutIcon,
       bgColor: "#fff3cd",
     },
     {
       id: "message",
       label: "Send Message",
-      icon: MessageIcon,
+      icon: messageIcon,
       bgColor: "#e1d5f7",
     },
   ];
@@ -294,6 +286,27 @@ const BannerSection: React.FC<IBannerSection> = ({
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
+    setIsExpanded(false); // Reset expansion when switching tabs
+  };
+
+  const toggleExpansion = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  // Helper function to check if text needs truncation
+  const needsTruncation = (text: string): boolean => {
+    if (!text) return false;
+
+    // Check if text has more than 3 lines
+    const lines = text.split('\n');
+    if (lines.length > 3) return true;
+
+    // For single-line text, check if it's long enough to wrap to more than 3 lines
+    // This is a rough estimate - in practice, CSS will handle the actual line wrapping
+    const estimatedCharsPerLine = 60;
+    const maxChars = 3 * estimatedCharsPerLine;
+
+    return text.length > maxChars;
   };
 
   // Helper function to parse and format amenities
@@ -437,10 +450,59 @@ const BannerSection: React.FC<IBannerSection> = ({
               lineHeight: 1.7,
               whiteSpace: "pre-line",
               color: "#555",
+              // CSS-based line clamping
+              display: isExpanded ? 'block' : '-webkit-box',
+              WebkitLineClamp: isExpanded ? 'unset' : 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: isExpanded ? 'visible' : 'hidden',
             }}
           >
             {getTabContent()}
           </Typography>
+          {(() => {
+            const content = getTabContent();
+            return needsTruncation(content) && (
+              <Button
+                onClick={toggleExpansion}
+                sx={{
+                  mt: 1,
+                  p: 0,
+                  minWidth: 'auto',
+                  textTransform: 'none',
+                  color: '#666',
+                  fontSize: '0.875rem',
+                  border: 'none !important',
+                  boxShadow: 'none !important',
+                  outline: 'none !important',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    color: '#333',
+                    border: 'none !important',
+                    boxShadow: 'none !important',
+                    outline: 'none !important',
+                  },
+                  '&:focus': {
+                    border: 'none !important',
+                    boxShadow: 'none !important',
+                    outline: 'none !important',
+                  },
+                  '&:active': {
+                    border: 'none !important',
+                    boxShadow: 'none !important',
+                    outline: 'none !important',
+                  },
+                  '&.Mui-focusVisible': {
+                    border: 'none !important',
+                    boxShadow: 'none !important',
+                    outline: 'none !important',
+                  },
+                }}
+                endIcon={isExpanded ? <ExpandLessIcon sx={{ fontSize: 16 }} /> : <ExpandMoreIcon sx={{ fontSize: 16 }} />}
+              >
+                {isExpanded ? 'Show less' : 'More'}
+              </Button>
+            );
+          })()}
         </Box>
       )}
 
@@ -468,11 +530,14 @@ const BannerSection: React.FC<IBannerSection> = ({
                   key={button.id}
                   onClick={() => !isLoading && handleButtonClick(button.id)}
                 >
-                  <ActionIcon $bgColor={button.bgColor}>
-                    <button.icon
-                      sx={{
-                        color: "#333",
-                        fontSize: { xs: 16, sm: 18, md: 20 }, // responsive icon size
+                  <ActionIcon>
+                    <img
+                      src={button.icon}
+                      alt={button.label}
+                      style={{
+                        width: 30,
+                        height: 30,
+                        objectFit: "contain",
                         opacity: isLoading ? 0.5 : 1
                       }}
                     />

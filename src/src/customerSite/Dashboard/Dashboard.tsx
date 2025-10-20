@@ -207,7 +207,8 @@ const Dashboard = () => {
                 zIndex: 1200,
                 bgcolor: "#fff",
                 px: { xs: 2, sm: 2 },
-                py: { xs: 1.5, sm: 2 },
+                pt: 1,
+                pb: { xs: 1.5, sm: 2 },
                 width: "100%",
               }}
             >

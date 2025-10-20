@@ -17,7 +17,7 @@ const CustomPaperWrapper: React.FC<CustomPaperWrapperProps> = ({
         width: "100%",
         border: "1px solid #F3F4F6",
         borderRadius: 3,
-        p: 2,
+        p: 1,
         bgcolor: "#fff",
         boxShadow: "0 0 0 1px #F0F0F0",
         ...sx,
