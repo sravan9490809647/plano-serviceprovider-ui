@@ -72,15 +72,21 @@ const CategoryList: React.FC<ICategoryList> = ({
         onChange={handleSearchChange}
         startIcon={<SearchIcon sx={{ color: 'text.secondary' }} />}
         sx={{
-          backgroundColor: 'background.paper',
+          '& .MuiOutlinedInput-root': {
+            height: '45px',
+            borderRadius: '8px',
+          },
+          '& .MuiOutlinedInput-input': {
+            padding: '12px',
+          },
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'divider',
+            borderColor: "#eeeeee",
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.main',
+            borderColor: "#eeeeee",
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.main',
+            borderColor: "#eeeeee",
           },
         }}
       />

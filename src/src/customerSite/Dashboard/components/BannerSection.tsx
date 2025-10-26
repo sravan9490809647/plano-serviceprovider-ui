@@ -1,15 +1,13 @@
-import { Box, styled, Typography, Tab, Tabs, Button } from "@mui/material";
+import { Box, styled, Typography, Tab, Tabs } from "@mui/material";
 import { AWS_BUCKET_BASE_URL, COLORS, CURRENCY, FONT_FAMILY, TEXT_COLORS } from "../../../Constants";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useState } from 'react';
 import type { BusinessDetails } from "../../../types";
 import waiterIcon from "./../../../../assets/images/waiter_icon.png";
 import checkoutIcon from "../../../../assets/images/checkout_icon.png";
 import messageIcon from "../../../../assets/images/message_icon.png";
 const BannerImageSection = styled(Box)(({ theme }) => ({
-  height: theme.spacing(15), // 120px - even smaller for mobile
+  height: theme.spacing(23),
   backgroundSize: "cover",
   backgroundPosition: "center",
   position: "relative",
@@ -113,8 +111,8 @@ const NavigationTabs = styled(Tabs)(({ theme }) => ({
 const BottomCardSection = styled(Box)(({ theme }) => ({
   backgroundColor: "#ffffff",
   padding: theme.spacing(1.5, 2),
-  border: "1px solid #e0e0e0",
-  borderRadius: "10px",
+  // border: "1px solid #e0e0e0",
+  // borderRadius: "10px",
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(2, 2.5),
   },
@@ -174,7 +172,7 @@ const ActionButtonsRow = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   gap: theme.spacing(0.75), // even smaller gap on mobile
-  justifyContent: "center",
+  justifyContent: "space-evenly",
   [theme.breakpoints.up('sm')]: {
     gap: theme.spacing(1.5),
   },
@@ -208,10 +206,10 @@ const ActionIcon = styled(Box, {
 
 const ActionLabel = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem", // smaller mobile font size
-  fontWeight: 700,
-  color: "#333",
+  color: TEXT_COLORS.BLACK,
   textAlign: "center",
   lineHeight: 1.2,
+  whiteSpace: "pre-line",
   [theme.breakpoints.up('sm')]: {
     fontSize: "1rem",
   }
@@ -257,19 +255,19 @@ const BannerSection: React.FC<IBannerSection> = ({
   const defaultActionButtons: ActionButtonConfig[] = [
     {
       id: "waiter",
-      label: "Request Waiter",
+      label: "Request\nWaiter",
       icon: waiterIcon,
       bgColor: "#e8f5e8",
     },
     {
       id: "checkout",
-      label: "Request Checkout",
+      label: "Request\nCheckout",
       icon: checkoutIcon,
       bgColor: "#fff3cd",
     },
     {
       id: "message",
-      label: "Send Message",
+      label: "Send\nMessage",
       icon: messageIcon,
       bgColor: "#e1d5f7",
     },
@@ -443,64 +441,32 @@ const BannerSection: React.FC<IBannerSection> = ({
             backgroundColor: COLORS.WHITE,
           }}
         >
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: { xs: "0.875rem", sm: "0.9375rem", md: "1rem" },
-              lineHeight: 1.7,
-              whiteSpace: "pre-line",
-              color: "#555",
-              // CSS-based line clamping
-              display: isExpanded ? 'block' : '-webkit-box',
-              WebkitLineClamp: isExpanded ? 'unset' : 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: isExpanded ? 'visible' : 'hidden',
-            }}
-          >
-            {getTabContent()}
-          </Typography>
           {(() => {
             const content = getTabContent();
-            return needsTruncation(content) && (
-              <Button
-                onClick={toggleExpansion}
+            const shouldShowExpand = needsTruncation(content);
+
+            return (
+              <Typography
+                variant="body1"
+                onClick={shouldShowExpand ? toggleExpansion : undefined}
                 sx={{
-                  mt: 1,
-                  p: 0,
-                  minWidth: 'auto',
-                  textTransform: 'none',
-                  color: '#666',
-                  fontSize: '0.875rem',
-                  border: 'none !important',
-                  boxShadow: 'none !important',
-                  outline: 'none !important',
-                  '&:hover': {
-                    backgroundColor: 'transparent',
+                  fontSize: { xs: "0.875rem", sm: "0.9375rem", md: "1rem" },
+                  lineHeight: 1.7,
+                  whiteSpace: "pre-line",
+                  color: "#555",
+                  cursor: shouldShowExpand ? 'pointer' : 'default',
+                  // CSS-based line clamping
+                  display: isExpanded ? 'block' : '-webkit-box',
+                  WebkitLineClamp: isExpanded ? 'unset' : 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: isExpanded ? 'visible' : 'hidden',
+                  '&:hover': shouldShowExpand ? {
                     color: '#333',
-                    border: 'none !important',
-                    boxShadow: 'none !important',
-                    outline: 'none !important',
-                  },
-                  '&:focus': {
-                    border: 'none !important',
-                    boxShadow: 'none !important',
-                    outline: 'none !important',
-                  },
-                  '&:active': {
-                    border: 'none !important',
-                    boxShadow: 'none !important',
-                    outline: 'none !important',
-                  },
-                  '&.Mui-focusVisible': {
-                    border: 'none !important',
-                    boxShadow: 'none !important',
-                    outline: 'none !important',
-                  },
+                  } : {},
                 }}
-                endIcon={isExpanded ? <ExpandLessIcon sx={{ fontSize: 16 }} /> : <ExpandMoreIcon sx={{ fontSize: 16 }} />}
               >
-                {isExpanded ? 'Show less' : 'More'}
-              </Button>
+                {content}
+              </Typography>
             );
           })()}
         </Box>
@@ -542,7 +508,7 @@ const BannerSection: React.FC<IBannerSection> = ({
                       }}
                     />
                   </ActionIcon>
-                  <ActionLabel>
+                  <ActionLabel variant="h5">
                     {button.label}
                   </ActionLabel>
                 </CustomActionButton>

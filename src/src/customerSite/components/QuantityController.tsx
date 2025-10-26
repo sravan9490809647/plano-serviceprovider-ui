@@ -30,6 +30,7 @@ const QuantityController: React.FC<QuantityControllerProps> = ({
           size="small"
           sx={{
             border: "1px solid #D1D5DB",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
             borderRadius: 2,
             width: { xs: 35, md: 40 },
             height: { xs: 35, md: 40 },
@@ -45,6 +46,9 @@ const QuantityController: React.FC<QuantityControllerProps> = ({
           borderRadius={3}
           px={1.5}
           height={{ xs: 35, md: 40 }}
+          sx={{
+            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          }}
         >
           <IconButton onClick={onRemove} size="small" sx={{ p: 0.5 }}>
             <RemoveIcon fontSize="small" />
