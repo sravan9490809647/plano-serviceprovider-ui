@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Divider, Grid, Typography, useTheme } from "@mui/material";
 import { type CategoryWithItems, type MenuItem } from "../../types";
 import MenuListItems from "../Dashboard/MenuListItems";
-import { FONT_SIZE, TEXT_COLORS } from "../../Constants";
+import { TEXT_COLORS } from "../../Constants";
 
 interface MenuSectionProps {
     filteredCategoryWithItems: CategoryWithItems[];
@@ -47,10 +47,8 @@ const MenuSection: React.FC<MenuSectionProps> = ({
                             }}
                         >
                             <Typography
-                                variant="h5"
+                                variant="h4"
                                 sx={{
-                                    fontSize: FONT_SIZE.XLARGE,
-                                    fontWeight: 900,
                                     color: TEXT_COLORS.PRIMARY,
                                     mr: 2,
                                     flexShrink: 0,
