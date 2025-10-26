@@ -13,10 +13,10 @@ const BannerImageSection = styled(Box)(({ theme }) => ({
   position: "relative",
   borderRadius: `${theme.spacing(1)}`,
   [theme.breakpoints.up('sm')]: {
-    height: theme.spacing(20),
+    height: theme.spacing(25), // 25% increase from 20
   },
   [theme.breakpoints.up('md')]: {
-    height: theme.spacing(25),
+    height: theme.spacing(31.25), // 25% increase from 25
   },
 }));
 
@@ -135,14 +135,14 @@ const TableInfo = styled(Box)(({ theme }) => ({
 }));
 
 const TableNumber = styled(Typography)(({ theme }) => ({
-  fontSize: "0.875rem", // smaller mobile font size
+  fontSize: "1rem", // increased from 0.875rem
   fontWeight: 700,
-  color: TEXT_COLORS.BLACK,
+  color: "#ff3b4b",
   [theme.breakpoints.up('sm')]: {
-    fontSize: "1rem",
+    fontSize: "1.125rem", // increased from 1rem
   },
   [theme.breakpoints.up('md')]: {
-    fontSize: "1.3rem", // larger desktop font size
+    fontSize: "1.4rem", // increased from 1.3rem
   },
 }));
 
@@ -157,14 +157,14 @@ const BillAmount = styled(Box)(({ theme }) => ({
 }));
 
 const BillText = styled(Typography)(({ theme }) => ({
-  fontSize: "0.875rem", // smaller mobile font size
+  fontSize: "1rem", // increased from 0.875rem
   fontWeight: 700,
   color: TEXT_COLORS.PRIMARY,
   [theme.breakpoints.up('sm')]: {
-    fontSize: "1rem",
+    fontSize: "1.125rem", // increased from 1rem
   },
   [theme.breakpoints.up('md')]: {
-    fontSize: "1.3rem", // larger desktop font size
+    fontSize: "1.4rem", // increased from 1.3rem
   },
 }));
 
@@ -201,7 +201,7 @@ const ActionIcon = styled(Box, {
   alignItems: "center",
   justifyContent: "center",
   marginBottom: "10px", // smaller margin
-  boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+  boxShadow: "0 2px 6px rgba(0,0,0,0.2)"
 }));
 
 const ActionLabel = styled(Typography)(({ theme }) => ({
@@ -300,9 +300,9 @@ const BannerSection: React.FC<IBannerSection> = ({
     if (lines.length > 3) return true;
 
     // For single-line text, check if it's long enough to wrap to more than 3 lines
-    // This is a rough estimate - in practice, CSS will handle the actual line wrapping
-    const estimatedCharsPerLine = 60;
-    const maxChars = 3 * estimatedCharsPerLine;
+    // Reduced threshold to be more sensitive
+    const estimatedCharsPerLine = 40; // Reduced from 60
+    const maxChars = 3 * estimatedCharsPerLine; // 120 characters
 
     return text.length > maxChars;
   };
@@ -409,7 +409,6 @@ const BannerSection: React.FC<IBannerSection> = ({
       <Typography
         variant="h3"
         sx={{
-          color: TEXT_COLORS.PRIMARY,
           fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
           fontWeight: 700,
           padding: { xs: theme => theme.spacing(1.5, 2), sm: theme => theme.spacing(2, 2.5) },
@@ -466,6 +465,16 @@ const BannerSection: React.FC<IBannerSection> = ({
                 }}
               >
                 {content}
+                {shouldShowExpand && (
+                  <span style={{
+                    color: TEXT_COLORS.BLACK,
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    marginLeft: '4px',
+                  }}>
+                    {isExpanded ? ' ...show less' : ' ...more'}
+                  </span>
+                )}
               </Typography>
             );
           })()}
@@ -481,7 +490,7 @@ const BannerSection: React.FC<IBannerSection> = ({
             </TableInfo>
             <BillAmount onClick={() => onGetOrderDetails && onGetOrderDetails()}>
               <BillText variant="h5">
-                {CURRENCY.symbol}{sessionTableAmount.toFixed(2)}
+                <span style={{ color: "black" }}>{CURRENCY.symbol}</span>{sessionTableAmount.toFixed(2)}
               </BillText>
               <KeyboardArrowDownIcon sx={{ fontSize: 16, color: "#333" }} />
             </BillAmount>
