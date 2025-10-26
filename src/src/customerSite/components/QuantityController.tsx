@@ -29,11 +29,11 @@ const QuantityController: React.FC<QuantityControllerProps> = ({
           onClick={onAdd}
           size="small"
           sx={{
-            border: "1px solid #D1D5DB",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+            border: "none",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
             borderRadius: 2,
-            width: { xs: 35, md: 40 },
-            height: { xs: 35, md: 40 },
+            width: { xs: 31.5, md: 36 }, // 10% decrease from 35/40
+            height: { xs: 31.5, md: 36 }, // 10% decrease from 35/40
           }}
         >
           <AddIcon fontSize="small" />
@@ -42,12 +42,12 @@ const QuantityController: React.FC<QuantityControllerProps> = ({
         <Box
           display="flex"
           alignItems="center"
-          border="1px solid #E5E7EB"
+          border="none"
           borderRadius={3}
           px={1.5}
-          height={{ xs: 35, md: 40 }}
+          height={{ xs: 31.5, md: 36 }} // 10% decrease from 35/40
           sx={{
-            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
           }}
         >
           <IconButton onClick={onRemove} size="small" sx={{ p: 0.5 }}>
